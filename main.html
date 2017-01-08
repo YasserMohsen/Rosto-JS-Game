@@ -2,21 +2,38 @@
 <html>
 <head>
 	<title>Rosto</title>
-	<style type="text/css"> 
-	div{
-    border-radius: 25px;
-    background-image: url("green.png");
-    width: 800px;
-    height: 450px;
-   	margin: auto;
-   	top: 5cm;
+	<style type="text/css">
+	body{ background-image: url("pics/gamebg.png");
 
+  }
+	#img1{
+    border-radius: 25px;
+
+		background-repeat: no-repeat;
+		background-size: 850px 550px;
+		width: 850px;
+    height: 550px;
+   	margin: 20px 250px;
+		opacity: 0.8;
+		-webkit-filter: blur(2px);
+  	-moz-filter: blur(2px);
+  	-o-filter: blur(2px);
+  	-ms-filter: blur(2px);
+  	filter: blur(2px);
     }
+		#img2{
+			width: 100px;
+	    height: 150px;
+			margin: 0px 50px;
+			opacity: 1.0;
+
+		}
 	</style>
 </head>
 <body>
 <div >
-	
+	<img src="pics/mainbg.jpeg"  id="img1">
+	<img src="pics/tletter.jpg"  id="img2">
 </div>
 </body>
 </html>
