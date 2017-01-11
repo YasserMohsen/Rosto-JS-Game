@@ -3,47 +3,59 @@
 <head>
 	<title>Rosto</title>
 	<style type="text/css">
-	body{ background-image: url("pics/gamebg.png");
-
-  }
-	#div1{
-    border-radius: 25px;
-		/*background-image: url("pics/mainbg.jpeg");*/
+	body{ 
+		margin: 0;
+    	padding: 0;
+		background-image: url("pics/gamebg.png");
+  	}
+	/*body{
+    	/*border-radius: 25px;
+		background-image: url("pics/mainbg.jpeg");
 		background-repeat: no-repeat;
 		background-size: 850px 550px;
 		width: 850px;
-    height: 550px;
-   	margin: 20px 250px;
+    	height: 550px;
+   		margin: 50px 220px;*/
 
 		}
-		/*#div2{
+		#div2{
 			position: relative;
 			top: 20px;
-			left:30px;
-
-		}*/
-		#img1{
-				border-radius: 25px;
-				filter: blur(4px);
-				width: 850px;
-		    height: 550px;
+			left:50px;
 
 		}
-		#img2{
+		
+		img{
 			position:absolute;
-			margin: 70px 210px;
-			width: 450px;
-			height: 150px;
-			z-index: 100;
+    		max-width: 100%;
+		}
+		#img1{
+			
+			border-radius: 25px;
+			/*filter: blur(4px);*/
+    		position: absolute;
+    		top: 50px;
+    		left: 200px;
+			width: 900px;
+		    height: 550px;
+		    z-index: -1;
+		}
+		#img2{
+			width: 350px;
+		    height: 210px;
 		}
 		</style>
 </head>
 <body>
-<div id="div1">
-		<img src="pics/rosto.png"  id="img2">
-	<img src="pics/mainbg.jpeg"  id="img1">
+	<div id="div1">
+	<img src="pics/mainbg.jpeg" id="img1">
+	<!--<img src="pics/rosto.png" id="img2">
+	<img src="pics/asad.png" id="img3" style="left: 100px; top=100px">-->
+	</div>
+	
 
 
-</div>
+
+<script src="hen.js"></script>
 </body>
 </html>
