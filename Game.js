@@ -25,12 +25,12 @@ var Game = {
     initLevel: function(num){
 
         //create hens
-//        Game.createHens(num);
+    Game.createHens(num);
         //create basket
-Game.setLevels();
-Game.setBasket();
+        //Game.setLevels();
+        //Game.setBasket();
         //loop on the hens and eggs
-  //      Game.bleach(num);
+    Game.bleach(num);
 
     }
     ,
@@ -195,6 +195,6 @@ Game.setBasket();
 
     }
 }
-Game.initLevel(1);
+//Game.initLevel(1);
 //Game.setLevels();
-//Game.init(Game.level);
+Game.init(Game.level);
