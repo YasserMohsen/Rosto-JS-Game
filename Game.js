@@ -82,8 +82,8 @@ Game.setBasket();
         }
     ,
     setBasket: function(){
-        var char1 = new myElement("pics/editedpics/basket.png",100,100,260,150,"b1","page3");
-        var char2 = new myElement("pics/basket2.jpg",100,100,260,370,"b2","page3");
+        //var char1 = new myElement("pics/editedpics/basket.png",100,100,260,150,"b1","page3");
+        var char2 = new myElement("pics/editedpics/basket2.png",100,100,260,370,"b2","page3");
 
   //      var maindiv = document.getElementById("div1");
         //var arr=document.getElementsByClassName("page3");
@@ -91,7 +91,7 @@ Game.setBasket();
         //maindiv.appendChild(arr);
         basket1=document.getElementById("b1");
         basket2=document.getElementById("b2");
-        basket1.alt="b 1";
+        //basket1.alt="b 1";
 
         basket1.onmouseover = function(){
            // alert("salma");
@@ -129,12 +129,12 @@ Game.setBasket();
 
           // var di=document.getElementById("div1");
            var page3elements = document.getElementsByClassName("page3");
-           
+
            for(var i=0; i<page3elements.length; i++)
            {
 
-           // alert(page3elements[0]);
-            page3elements[i].parentNode.removeChild(page3elements[i]);
+           alert(page3element[i]);
+            //page3elements[i].parentNode.removeChild(page3elements[i]);
              //alert("ggg");
           }
            
