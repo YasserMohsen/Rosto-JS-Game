@@ -19,19 +19,19 @@ var Game = {
 
 
     init: function(l){
-    	Game.initLevel(l);
-        Game.moving();
+    	//Game.initLevel(l);
+        //Game.moving();
     }
     ,
     initLevel: function(num){
 
         //create hens
-    Game.createHens(num);
+    //Game.createHens(num);
         //create basket
-        //Game.setLevels();
-        //Game.setBasket();
+        Game.setLevels();
+        Game.setBasket();
         //loop on the hens and eggs
-    Game.bleach(num);
+    //Game.bleach(num);
 
     }
     ,
@@ -130,11 +130,13 @@ var Game = {
           // var di=document.getElementById("div1");
            var page3elements = document.getElementsByClassName("page3");
            
-           for(var i=0; i<page3elements.length; i++)
+           //for(var i=0; i<page3elements.length; i++)
+           while(page3elements[0])
            {
 
            // alert(page3elements[0]);
-            page3elements[i].parentNode.removeChild(page3elements[i]);
+            page3elements[0].parentElement.removeChild(page3elements[0]);
+            //console.log(page3elements[i].parentNode.children);    
              //alert("ggg");
           }
            
@@ -218,6 +220,6 @@ var Game = {
 
     }
 }
-//Game.initLevel(1);
+Game.initLevel(1);
 //Game.setLevels();
-Game.init(Game.level);
+//Game.init(Game.level);
