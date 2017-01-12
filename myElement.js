@@ -35,6 +35,24 @@ var myElement = function(source,w,h,x,y,ID,cls){
             this.Img.src = this.source;
         }
     });
+    Object.defineProperty(this, 'w', {
+        get: function () {
+            return w;
+        },
+        set: function (winput) {
+            w = winput
+            this.Img.style.width = w + 'px';
+        }
+    });
+    Object.defineProperty(this, 'h', {
+        get: function () {
+            return h;
+        },
+        set: function (hinput) {
+            h = hinput
+            this.Img.style.height = h + 'px';
+        }
+    });
 }
 // setters and getters 
 myElement.prototype.setWidth = function(W){
@@ -82,4 +100,11 @@ myElement.prototype.move = function(step){
 myElement.prototype.erase = function(){
     var pElement = this.Img.parentElement;
     pElement.removeChild(this.Img);
+}
+myElement.prototype.zoom = function(ratio){
+       
+        this.x -= ((this.w * (ratio-1)) / 2);
+        this.y -= ((this.h * (ratio-1)) / 2);
+       this.w *= ratio;
+        this.h *= ratio;
 }
