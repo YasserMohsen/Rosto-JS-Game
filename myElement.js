@@ -83,6 +83,7 @@ myElement.prototype.appendImg = function(parentId){
     this.Img = document.createElement("img");
     this.Img.src = this.source;
     this.Img.id = this.ID;
+    this.Img.className = this.cls;
     this.Img.style.width = this.w + "px";
     this.Img.style.height = this.h + "px";
     this.Img.style.top = this.y + "px";

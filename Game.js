@@ -10,11 +10,12 @@ var Game = {
     BROKEN_DISAPPEAR_AFTER:2000,
     EGG_MOVE_EVERY: 30,
     EGG_STEP:5,
-    level:3,
+    level:0,
     bg_width:900,
     bg_height:550,
     bg_top:50,
     bg_left:200,
+    selectedbasket:0,
 
 
     init: function(l){
@@ -37,30 +38,52 @@ Game.setBasket();
     setLevels: function(){
 
         var x = new myElement("pics/editedpics/Leveltree.png",470,500,400,70,"x","page3");
-        var lvl1 = new myElement("pics/1.png",100,90,450,300,"lvl1","page3");
-        var lvl2 = new myElement("pics/2.png",60,60,600,200,"lvl2","page3");
-        var lvl3 = new myElement("pics/3.png",80,80,700,290,"lvl3","page3");
 
-        //x.appendChild(lvl1);
+
+        var lvl1 = new myElement("pics/editedpics/level1gray.png",70,60,460,340,"lvl1","page3");
+        var lvl2 = new myElement("pics/editedpics/level2trans.png",60,60,515,215,"lvl2","page3");
+        var lvl3 = new myElement("pics/editedpics/level3trans.png",70,70,600,120,"lvl3","page3");
+
+        var badge1 = new myElement("pics/editedpics/badge1.png",90,90,950,90,"badge1","page3");
+        var badge2 = new myElement("pics/editedpics/badge2.png",90,90,950,220,"badge2","page3");
+        //var lvl4 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
+        //var lvl5 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
+
+
+    
+        var start = new myElement("pics/editedpics/start.png",150,150,855,400,"start","page3");
+
+        startelement = document.getElementById("start");
+
+       startelement.onmouseover = function(){
+           // alert("salma");
+           start.zoom(1.25);
+         
+        }
+
+       startelement.onmouseleave = function(){
+            start.zoom(.8)
+        
+        }
         if(Game.level==1)
         {
-            lvl1.source="pics/lol.png";
+            lvl1.source="pics/editedpics/level1red.png";
         }
         else if(Game.level==2)
         {
-            lvl2.source="pics/number-2.jpg";
+            lvl2.source="pics/editedpics/level2red.png";
         }
         else if (Game.level==3)
         {
-            lvl3.source="pics/33.jpg";
+            lvl3.source="pics/editedpics/level3red.png";
         }
 
 
         }
     ,
     setBasket: function(){
-        var char1 = new myElement("pics/basket.jpg",100,100,450,450,"b1","page3");
-        var char2 = new myElement("pics/basket2.jpg",100,100,700,450,"b2","page3");
+        var char1 = new myElement("pics/editedpics/basket.png",100,100,260,150,"b1","page3");
+        var char2 = new myElement("pics/basket2.jpg",100,100,260,370,"b2","page3");
 
   //      var maindiv = document.getElementById("div1");
         //var arr=document.getElementsByClassName("page3");
@@ -73,50 +96,50 @@ Game.setBasket();
         basket1.onmouseover = function(){
            // alert("salma");
            char1.zoom(1.25);
-           /*char1.x = 400;
-           char1.y = 400;
-           char1.w = 200;
-           char1.h = 200;*/
-          // basket1.style.width= '150px';
-          // basket1.style.height= '150px';
-          // alert(char1.w);
-          //  char1.cls="classchar";
-           // basket1.className = "classchar";
+         
         }
 
        basket1.onmouseleave = function(){
             char1.zoom(.8)
+        
+        }
+
+         basket2.onmouseover = function(){
            // alert("salma");
-           /*char1.x = 450;
-           char1.y = 450;
-           char1.w=100;
-           char1.h=100;*/
-         //  basket1.style.width= '100px';
-          // basket1.style.height= '100px';
-          //  char1.cls="classchar";
-           // basket1.className = "classchar";
+           char2.zoom(1.25);
+         
+        }
+
+       basket2.onmouseleave = function(){
+            char2.zoom(.8)
+        
         }
 //*/
         basket1.onclick = function(){
-          //  var arr=document.getElementsByClassName("page3");
-          /*for(i=0;i<arr.length;i++)
-          {
-            if( arr[i].class("page3") )
+            selectedbasket=0;
 
-            { maindiv.removeChild(arr[i]); }
-
-            }*/
-           //basket1.style.width= '100px';
-           //basket1.style.height= '100px';
-          //  char1.cls="classchar";
-           // basket1.className = "classchar";
+        
         }
-        //basket1.addEventListener('mouseover',function(){
+         basket2.onclick = function(){
+            selectedbasket=1;
+        
+        }
+
+        start.onclick = function(){
+
+          // var di=document.getElementById("div1");
+           var page3elements = document.getElementsByClassName("page3");
            
-          //         });
-        //basket1.addEventListener('click',function(){
-            
-        //});
+           for(var i=0; i<page3elements.length; i++)
+           {
+
+           // alert(page3elements[0]);
+            page3elements[i].parentNode.removeChild(page3elements[i]);
+             //alert("ggg");
+          }
+           
+          // di.removeChild(document.getElementById("start"));
+        }
     }
     ,
 
