@@ -10,28 +10,31 @@ var Game = {
     BROKEN_DISAPPEAR_AFTER:2000,
     EGG_MOVE_EVERY: 30,
     EGG_STEP:5,
-    level:0,
+    level:2,
     bg_width:900,
     bg_height:550,
     bg_top:50,
     bg_left:200,
     selectedbasket:0,
+    b:0,
 
 
     init: function(l){
-    	//Game.initLevel(l);
-        //Game.moving();
+    	Game.initLevel(l);
+        Game.moving();
+        Game.catchEgg();
     }
     ,
     initLevel: function(num){
 
         //create hens
-    //Game.createHens(num);
+    Game.createHens(num);
         //create basket
-        Game.setLevels();
-        Game.setBasket();
+        Game.createBasket();
+        //Game.setLevels();
+        //Game.setBasket();
         //loop on the hens and eggs
-    //Game.bleach(num);
+    Game.bleach(num);
 
     }
     ,
@@ -110,7 +113,7 @@ var Game = {
          
         }
 
-       basket2.onmouseleave = function(){
+        basket2.onmouseleave = function(){
             char2.zoom(.8)
         
         }
@@ -144,7 +147,18 @@ var Game = {
         }
     }
     ,
-
+    createBasket: function(){
+        var myBasket = new myElement("pics/editedpics/basket.png", 100,60,600,500, "basket","page4");
+        document.addEventListener("mousemove", function(e){
+        var newx = e.clientX;
+    if (newx >250 && newx < 950)
+    {
+        myBasket.x = e.clientX;
+    }
+    }, false);
+        Game.b = myBasket;
+    }
+    ,
     update_Y: function(newY){
     	for(var i=0; i<Game.eggsList.length; i++){
     		Game.eggsList[i].move(newY);
@@ -169,6 +183,24 @@ var Game = {
             var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"Hen");
             Game.hensList.push(hen);
         };
+        var bg = document.getElementById("img1");
+        bg.style.filter= 'none';
+    }
+    ,
+    catchEgg: function(){
+        for(var i=0; i<Game.eggsList.length; i++){
+            console.log(Game.b.x)
+            if (Game.eggsList[i].y >= 400){
+                
+                if (Game.eggsList[i].x > Game.b.x && Game.eggsList[i].x < (Game.b.x + Game.b.w))
+                {
+                    console.log("7amada");
+                }
+            }
+        }
+        setTimeout(function(){
+            Game.catchEgg();
+        }, 40);
     }
     ,
     bleach: function(num){
@@ -220,6 +252,6 @@ var Game = {
 
     }
 }
-Game.initLevel(1);
+//Game.initLevel(1);
 //Game.setLevels();
-//Game.init(Game.level);
+Game.init(Game.level);
