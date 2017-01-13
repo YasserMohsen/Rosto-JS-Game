@@ -15,27 +15,152 @@ var Game = {
     bg_height:550,
     bg_top:50,
     bg_left:200,
+    selectedbasket:0,
+    b:0,
+
 
     init: function(l){
     	Game.initLevel(l);
-        Game.moving();
+        //Game.moving();
+        //Game.catchEgg();
     }
     ,
     initLevel: function(num){
-        //create hens
-        Game.createHens(num);
-        //create basket
 
+        //create hens
+    //Game.createHens(num);
+        //create basket
+        //Game.createBasket();
+        Game.setLevels();
+        Game.setBasket();
         //loop on the hens and eggs
-        Game.bleach(num);
+   // Game.bleach(num);
+
+    }
+    ,
+    setLevels: function(){
+
+        var x = new myElement("pics/editedpics/Leveltree.png",470,500,400,70,"x","page3");
+
+
+        var lvl1 = new myElement("pics/editedpics/level1gray.png",70,60,460,340,"lvl1","page3");
+        var lvl2 = new myElement("pics/editedpics/level2trans.png",60,60,515,215,"lvl2","page3");
+        var lvl3 = new myElement("pics/editedpics/level3trans.png",70,70,600,120,"lvl3","page3");
+
+        var badge1 = new myElement("pics/editedpics/badge1.png",90,90,950,90,"badge1","page3");
+        var badge2 = new myElement("pics/editedpics/badge2.png",90,90,950,220,"badge2","page3");
+        //var lvl4 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
+        //var lvl5 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
+
+
+    
+        var start = new myElement("pics/editedpics/start.png",150,150,855,400,"start","page3");
+
+        startelement = document.getElementById("start");
+
+        startelement.onmouseover = function(){
+           // alert("salma");
+           start.zoom(1.25);
+         
+        }
+
+        startelement.onmouseleave = function(){
+            start.zoom(.8)
+        
+        }
+        if(Game.level==1)
+        {
+            lvl1.source="pics/editedpics/level1red.png";
+        }
+        else if(Game.level==2)
+        {
+            lvl2.source="pics/editedpics/level2red.png";
+        }
+        else if (Game.level==3)
+        {
+            lvl3.source="pics/editedpics/level3red.png";
+        }
+
+
+        }
+    ,
+    setBasket: function(){
+        var char1 = new myElement("pics/editedpics/basket.png",100,100,260,150,"b1","page3");
+        var char2 = new myElement("pics/editedpics/basket2.png",100,100,260,370,"b2","page3");
+
+  //      var maindiv = document.getElementById("div1");
+        //var arr=document.getElementsByClassName("page3");
+
+        //maindiv.appendChild(arr);
+        basket1=document.getElementById("b1");
+        basket2=document.getElementById("b2");
+        //basket1.alt="b 1";
+
+        basket1.onmouseover = function(){
+           // alert("salma");
+           char1.zoom(1.25);
+         
+        }
+
+        basket1.onmouseleave = function(){
+            char1.zoom(.8)
+        
+        }
+
+         basket2.onmouseover = function(){
+           // alert("salma");
+           char2.zoom(1.25);
+         
+        }
+
+        basket2.onmouseleave = function(){
+            char2.zoom(.8)
+        
+        }
+
+        basket1.onclick = function(){
+            selectedbasket=0;
+
+        
+        }
+         basket2.onclick = function(){
+            selectedbasket=1;
+        
+        }
+
+        start.onclick = function(){
+
+            var page3elements = document.getElementsByClassName("page3");
+
+            while(page3elements[0])
+            {
+                page3elements[0].parentElement.removeChild(page3elements[0]); 
+            }
+        }
+    }
+    ,
+    createBasket: function(){
+        var myBasket = new myElement("pics/editedpics/basket.png", 100,60,600,500, "basket","page4");
+        document.addEventListener("mousemove", function(e){
+            var newx = e.clientX;
+            if (newx >250 && newx < 950)
+            {   
+                myBasket.x = e.clientX;
+            }
+        }, false);
+        Game.b = myBasket;
     }
     ,
     update_Y: function(newY){
-    	for(var i=0; i<Game.eggsList.length; i++){
+    	for(var i=0; i<Game.eggsList.length; i++)
+        {
     		Game.eggsList[i].move(newY);
-    		}
     	}
+<<<<<<< HEAD
 
+=======
+    }    
+>>>>>>> c9f9acdfb590bd26141c1cecb549aecb507d146d
     ,
     moving: function(){
         Game.update_Y(Game.EGG_STEP);
@@ -54,6 +179,24 @@ var Game = {
             var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"Hen");
             Game.hensList.push(hen);
         };
+        var bg = document.getElementById("img1");
+        bg.style.filter= 'none';
+    }
+    ,
+    catchEgg: function(){
+        for(var i=0; i<Game.eggsList.length; i++){
+            console.log(Game.b.x)
+            if (Game.eggsList[i].y >= 400){
+                
+                if (Game.eggsList[i].x > Game.b.x && Game.eggsList[i].x < (Game.b.x + Game.b.w))
+                {
+                    console.log("7amada");
+                }
+            }
+        }
+        setTimeout(function(){
+            Game.catchEgg();
+        }, 40);
     }
     ,
     bleach: function(num){
@@ -105,5 +248,10 @@ var Game = {
 
     }
 }
+<<<<<<< HEAD
 
+=======
+//Game.initLevel(1);
+//Game.setLevels();
+>>>>>>> c9f9acdfb590bd26141c1cecb549aecb507d146d
 Game.init(Game.level);

@@ -3,27 +3,10 @@
 <head>
 	<title>Rosto</title>
 	<style type="text/css">
-	body{ 
-		margin: 0;
-    	padding: 0;
+	body
+	{ 
 		background-image: url("pics/gamebg.png");
   	}
-	/*body{
-    	/*border-radius: 25px;
-		background-image: url("pics/mainbg.jpeg");
-		background-repeat: no-repeat;
-		background-size: 850px 550px;
-		width: 850px;
-    	height: 550px;
-   		margin: 50px 220px;*/
-
-		}
-		#div2{
-			position: relative;
-			top: 20px;
-			left:50px;
-
-		}
 		
 		img{
 			position:absolute;
@@ -32,18 +15,22 @@
 		#img1{
 			
 			border-radius: 25px;
-			/*filter: blur(4px);*/
     		position: absolute;
+    		filter: blur(4px);
     		top: 50px;
     		left: 200px;
 			width: 900px;
 		    height: 550px;
 		    z-index: -1;
+		    /*animation-name:ex;
+		    animation-duration:3s;*/
+
 		}
-		#img2{
-			width: 350px;
-		    height: 210px;
-		}
+		/*@keyframes ex{
+			0%{filter: blur(4px);}
+			100%{filter: blur(0px);}	
+		}*/
+
 		</style>
 </head>
 <body>
