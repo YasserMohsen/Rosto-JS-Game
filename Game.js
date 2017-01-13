@@ -15,46 +15,79 @@ var Game = {
     bg_height:550,
     bg_top:50,
     bg_left:200,
-    selectedbasket:0,
+    selectedBasket:"",
     b:0,
-
+    eggScore:0,
+    brokenScore:0,
+    lifeScore:0,
 
     init: function(l){
     	Game.initLevel(l);
-        Game.moving();
-        Game.catchEgg();
+       
+
+       // divv.appendChild(val);
+
+        //Game.moving();
+       // Game.catchEgg();
     }
     ,
     initLevel: function(num){
 
         //create hens
-    Game.createHens(num);
+ //   Game.createHens(num);
         //create basket
-        Game.createBasket();
-        //Game.setLevels();
-        //Game.setBasket();
+ //       Game.createBasket("salma/basket.png");
+ //   Game.setLevels();
+//  Game.setBasket();
         //loop on the hens and eggs
-    Game.bleach(num);
+ //   Game.bleach(num);
+
+//Game.moving();
+//Game.setScoreBar();
 
     }
     ,
+    setRecord: function(score,score1,score2){
+        score.innerHTML=score1
+        score.innerHTML+='/';
+        score.innerHTML+=score2;
+    }
+    ,
+    setScoreBar: function(){
+        var bar = new myElement("salma/rect.png",110,528,980,60,"bar","page4","img");
+        var life = new myElement("salma/heart.png",50,45,1010,435,"heart","page4","img");
+        var egg = new myElement("salma/egggg.png",35,50,1015,200,"egg","page4","img");
+        var brokenegg = new myElement("salma/Un.png",50,40,1010,320,"broken","page4","img");
+
+        var eggsc = new myElement("",30,30,1010,255,"score1","page4","p");
+
+        eggsc = document.getElementById("score1");
+        Game.setRecord(eggsc,)
+
+        barobj = document.getElementById("bar");
+        barobj.style.opacity=0.6;
+
+
+}
+    
+    ,
     setLevels: function(){
 
-        var x = new myElement("pics/editedpics/Leveltree.png",470,500,400,70,"x","page3");
+        var x = new myElement("salma/Leveltree.png",470,500,400,70,"lvltree","page3","img");
 
 
-        var lvl1 = new myElement("pics/editedpics/level1gray.png",70,60,460,340,"lvl1","page3");
-        var lvl2 = new myElement("pics/editedpics/level2trans.png",60,60,515,215,"lvl2","page3");
-        var lvl3 = new myElement("pics/editedpics/level3trans.png",70,70,600,120,"lvl3","page3");
+        var lvl1 = new myElement("salma/level1gray.png",70,60,460,340,"lvl1","page3","img");
+        var lvl2 = new myElement("salma/level2trans.png",60,60,515,215,"lvl2","page3","img");
+        var lvl3 = new myElement("salma/level3trans.png",70,70,600,120,"lvl3","page3","img");
 
-        var badge1 = new myElement("pics/editedpics/badge1.png",90,90,950,90,"badge1","page3");
-        var badge2 = new myElement("pics/editedpics/badge2.png",90,90,950,220,"badge2","page3");
+        var badge1 = new myElement("salma/badge1.png",90,90,950,90,"badge1","page3","img");
+        var badge2 = new myElement("salma/badge2.png",90,90,950,220,"badge2","page3","img");
         //var lvl4 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
         //var lvl5 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
 
 
     
-        var start = new myElement("pics/editedpics/start.png",150,150,855,400,"start","page3");
+        var start = new myElement("salma/start.png",150,150,855,400,"start","page3","img");
 
         startelement = document.getElementById("start");
 
@@ -70,23 +103,29 @@ var Game = {
         }
         if(Game.level==1)
         {
-            lvl1.source="pics/editedpics/level1red.png";
+            lvl1.source="salma/level1red.png";
         }
         else if(Game.level==2)
         {
-            lvl2.source="pics/editedpics/level2red.png";
+            lvl2.source="salma/level2red.png";
         }
         else if (Game.level==3)
         {
-            lvl3.source="pics/editedpics/level3red.png";
+            lvl3.source="salma/level3red.png";
         }
 
 
         }
+        ,
+        selectBasket: function(baskobj,rate)
+        {
+            baskobj.style.opacity=rate;
+        }
+ 
     ,
     setBasket: function(){
-        var char1 = new myElement("pics/editedpics/basket.png",100,100,260,150,"b1","page3");
-        var char2 = new myElement("pics/editedpics/basket2.png",100,100,260,370,"b2","page3");
+        var char1 = new myElement("salma/basket.png",100,100,260,150,"b1","page3","img");
+        var char2 = new myElement("salma/basket2.png",100,100,260,370,"b2","page3","img");
 
   //      var maindiv = document.getElementById("div1");
         //var arr=document.getElementsByClassName("page3");
@@ -119,12 +158,15 @@ var Game = {
         }
 //*/
         basket1.onclick = function(){
-            selectedbasket=0;
-
-        
+            selectedBasket=char1.source;
+            Game.selectBasket(basket1,1);
+            Game.selectBasket(basket2,0.5);
         }
+
          basket2.onclick = function(){
-            selectedbasket=1;
+            selectedBasket=char2.source;
+            Game.selectBasket(basket2,1);
+            Game.selectBasket(basket1,0.5);
         
         }
 
@@ -133,14 +175,6 @@ var Game = {
           // var di=document.getElementById("div1");
            var page3elements = document.getElementsByClassName("page3");
 
-
-           for(var i=0; i<page3elements.length; i++)
-           {
-
-           alert(page3element[i]);
-            //page3elements[i].parentNode.removeChild(page3elements[i]);
-           
-           //for(var i=0; i<page3elements.length; i++)
            while(page3elements[0])
            {
 
@@ -150,13 +184,13 @@ var Game = {
 
              //alert("ggg");
           }
-           
-          // di.removeChild(document.getElementById("start"));
-        }
+          Game.createBasket(selectedBasket);
+    
     }
+}
     ,
-    createBasket: function(){
-        var myBasket = new myElement("pics/editedpics/basket.png", 100,60,600,500, "basket","page4");
+    createBasket: function(basketsrc){
+        var myBasket = new myElement(basketsrc, 100,60,600,500, "basket","page4","img");
         document.addEventListener("mousemove", function(e){
         var newx = e.clientX;
     if (newx >250 && newx < 950)
@@ -188,7 +222,7 @@ var Game = {
         var first_x = Game.bg_left + diff;
         for(var i=0; i<n; i++){
             generated_X = first_x + (diff*i);
-            var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"Hen");
+            var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"Hen","img");
             Game.hensList.push(hen);
         };
         var bg = document.getElementById("img1");
@@ -222,7 +256,7 @@ var Game = {
     		generated_X = first_x + (diff*index);
     	} while (Game.X_now == generated_X);
     	Game.X_now = generated_X;
-    	var egg = new myElement("pics/egggg.png",15,22, generated_X ,150,"egg" + parseInt(Math.random() * 10000),"egg");
+    	var egg = new myElement("salma/egggg.png",15,22, generated_X ,150,"egg" + parseInt(Math.random() * 10000),"egg","img");
         Game.eggsList.push(egg);
 
         //hen standing
@@ -250,7 +284,7 @@ var Game = {
     			var broken_x = Game.eggsList[i].x;
     			Game.eggsList[i].erase();
     			Game.eggsList.splice(i, 1);
-    			var brokenEgg = new myElement("pics/Un.png",30,40, broken_x ,500,"brokenEgg" + parseInt(Math.random() * 10000),"Egg");
+    			var brokenEgg = new myElement("salma/Un.png",30,40, broken_x ,500,"brokenEgg" + parseInt(Math.random() * 10000),"Egg","img");
     			Game.brokenList.push(brokenEgg);
     			setTimeout(function(){
     				Game.brokenList[0].erase();Game.brokenList.shift();
