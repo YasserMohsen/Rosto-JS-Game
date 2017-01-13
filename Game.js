@@ -156,11 +156,7 @@ var Game = {
         {
     		Game.eggsList[i].move(newY);
     	}
-<<<<<<< HEAD
-
-=======
     }    
->>>>>>> c9f9acdfb590bd26141c1cecb549aecb507d146d
     ,
     moving: function(){
         Game.update_Y(Game.EGG_STEP);
@@ -248,10 +244,6 @@ var Game = {
 
     }
 }
-<<<<<<< HEAD
-
-=======
 //Game.initLevel(1);
 //Game.setLevels();
->>>>>>> c9f9acdfb590bd26141c1cecb549aecb507d146d
 Game.init(Game.level);
