@@ -10,7 +10,7 @@ var Game = {
     BROKEN_DISAPPEAR_AFTER:2000,
     EGG_MOVE_EVERY: 30,
     EGG_STEP:5,
-    level:1,
+    level:2,
     bg_width:900,
     bg_height:550,
     bg_top:50,
@@ -35,7 +35,7 @@ var Game = {
     		Game.eggsList[i].move(newY);
     		}
     	}
-        
+
     ,
     moving: function(){
         Game.update_Y(Game.EGG_STEP);
