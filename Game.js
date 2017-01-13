@@ -21,20 +21,20 @@ var Game = {
 
     init: function(l){
     	Game.initLevel(l);
-        Game.moving();
-        Game.catchEgg();
+        //Game.moving();
+        //Game.catchEgg();
     }
     ,
     initLevel: function(num){
 
         //create hens
-    Game.createHens(num);
+    //Game.createHens(num);
         //create basket
-        Game.createBasket();
-        //Game.setLevels();
-        //Game.setBasket();
+        //Game.createBasket();
+        Game.setLevels();
+        Game.setBasket();
         //loop on the hens and eggs
-    Game.bleach(num);
+   // Game.bleach(num);
 
     }
     ,
@@ -58,13 +58,13 @@ var Game = {
 
         startelement = document.getElementById("start");
 
-       startelement.onmouseover = function(){
+        startelement.onmouseover = function(){
            // alert("salma");
            start.zoom(1.25);
          
         }
 
-       startelement.onmouseleave = function(){
+        startelement.onmouseleave = function(){
             start.zoom(.8)
         
         }
@@ -102,7 +102,7 @@ var Game = {
          
         }
 
-       basket1.onmouseleave = function(){
+        basket1.onmouseleave = function(){
             char1.zoom(.8)
         
         }
@@ -117,7 +117,7 @@ var Game = {
             char2.zoom(.8)
         
         }
-//*/
+
         basket1.onclick = function(){
             selectedbasket=0;
 
@@ -130,49 +130,33 @@ var Game = {
 
         start.onclick = function(){
 
-          // var di=document.getElementById("div1");
-           var page3elements = document.getElementsByClassName("page3");
+            var page3elements = document.getElementsByClassName("page3");
 
-
-           for(var i=0; i<page3elements.length; i++)
-           {
-
-           alert(page3element[i]);
-            //page3elements[i].parentNode.removeChild(page3elements[i]);
-           
-           //for(var i=0; i<page3elements.length; i++)
-           while(page3elements[0])
-           {
-
-           // alert(page3elements[0]);
-            page3elements[0].parentElement.removeChild(page3elements[0]);
-            //console.log(page3elements[i].parentNode.children);    
-
-             //alert("ggg");
-          }
-           
-          // di.removeChild(document.getElementById("start"));
+            while(page3elements[0])
+            {
+                page3elements[0].parentElement.removeChild(page3elements[0]); 
+            }
         }
     }
     ,
     createBasket: function(){
         var myBasket = new myElement("pics/editedpics/basket.png", 100,60,600,500, "basket","page4");
         document.addEventListener("mousemove", function(e){
-        var newx = e.clientX;
-    if (newx >250 && newx < 950)
-    {
-        myBasket.x = e.clientX;
-    }
-    }, false);
+            var newx = e.clientX;
+            if (newx >250 && newx < 950)
+            {   
+                myBasket.x = e.clientX;
+            }
+        }, false);
         Game.b = myBasket;
     }
     ,
     update_Y: function(newY){
-    	for(var i=0; i<Game.eggsList.length; i++){
+    	for(var i=0; i<Game.eggsList.length; i++)
+        {
     		Game.eggsList[i].move(newY);
-    		}
     	}
-        
+    }    
     ,
     moving: function(){
         Game.update_Y(Game.EGG_STEP);
