@@ -1,4 +1,4 @@
-var myElement = function(source,w,h,x,y,ID,cls){
+var myElement = function(source,w,h,x,y,ID,cls,element){
     this.source = source;
     this.w = w;
     this.h = h;
@@ -6,8 +6,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
     this.y = y;
     this.ID = ID;
     this.cls = cls;
-    this.source=source;
-    this.appendImg("div1");
+    this.appendElement("div1",element);
 
     Object.defineProperty(this, 'y', {
         get: function () {
@@ -15,7 +14,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
         },
         set: function (yinput) {
             y = yinput
-            this.Img.style.top = y + 'px';
+            this.element.style.top = y + 'px';
         }
     });
     Object.defineProperty(this, 'x', {
@@ -24,7 +23,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
         },
         set: function (xinput) {
             x = xinput
-            this.Img.style.left = x + 'px';
+            this.element.style.left = x + 'px';
         }
     });
     Object.defineProperty(this, 'source', {
@@ -33,7 +32,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
         },
         set: function (newSource) {
             source = newSource
-            this.Img.src = this.source;
+            this.element.src = this.source;
         }
     });
     Object.defineProperty(this, 'w', {
@@ -42,7 +41,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
         },
         set: function (winput) {
             w = winput
-            this.Img.style.width = w + 'px';
+            this.element.style.width = w + 'px';
         }
     });
     Object.defineProperty(this, 'h', {
@@ -51,7 +50,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
         },
         set: function (hinput) {
             h = hinput
-            this.Img.style.height = h + 'px';
+            this.element.style.height = h + 'px';
         }
     });
 }
@@ -80,17 +79,17 @@ myElement.prototype.setSource = function(s){
 }
 
 
-myElement.prototype.appendImg = function(parentId){
-    this.Img = document.createElement("img");
-    this.Img.src = this.source;
-    this.Img.id = this.ID;
-    this.Img.className = this.cls;
-    this.Img.style.width = this.w + "px";
-    this.Img.style.height = this.h + "px";
-    this.Img.style.top = this.y + "px";
-    this.Img.style.left = this.x + "px";
+myElement.prototype.appendElement = function(parentId,element){
+    this.element = document.createElement(element);
+    this.element.src = this.source;
+    this.element.id = this.ID;
+    this.element.className = this.cls;
+    this.element.style.width = this.w + "px";
+    this.element.style.height = this.h + "px";
+    this.element.style.top = this.y + "px";
+    this.element.style.left = this.x + "px";
     var pElement = document.getElementById(parentId);
-    pElement.appendChild(this.Img);
+    pElement.appendChild(this.element);
 }
     
 
@@ -100,8 +99,8 @@ myElement.prototype.move = function(step){
 }
 
 myElement.prototype.erase = function(){
-    var pElement = this.Img.parentElement;
-    pElement.removeChild(this.Img);
+    var pElement = this.element.parentElement;
+    pElement.removeChild(this.element);
 }
 myElement.prototype.zoom = function(ratio){
        
