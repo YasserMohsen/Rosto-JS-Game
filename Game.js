@@ -10,50 +10,49 @@ var Game = {
     BROKEN_DISAPPEAR_AFTER:2000,
     EGG_MOVE_EVERY: 30,
     EGG_STEP:5,
-    level:2,
+    level:1,
     bg_width:900,
     bg_height:550,
     bg_top:50,
     bg_left:200,
     selectedBasket:"salma/basket.png",
     b:0,
+
     eggS:10,
     brokenS:10,
     lifeS:10,
     lvlScore:50,
     lvlTimer:60,
+    CATCHED_EGGS:0,
+    INGAME:true,
 
-    init: function(l){
-    	Game.initLevel(l);
-       
 
-       // divv.appendChild(val);
-
-        //Game.moving();
-       // Game.catchEgg();
-        //Game.moving();
-        //Game.catchEgg();
-
+    init: function(){
+    	Game.initMap();
+        
     }
     ,
-    initLevel: function(num){
+    initLevel: function(){
 
         //create hens
 
-  //  Game.createHens(num);
-        //create basket
-   //     Game.createBasket(Game.selectedBasket);
-
- //   Game.setLevels();
-
-//  Game.setBasket();
-        //loop on the hens and eggs
-//    Game.bleach(num);
-
-//Game.moving();
-Game.setScoreBar();
-Game.setTimer(Game.lvlTimer);
+    Game.setScoreBar();
+    Game.setTimer(Game.lvlTimer);
     
+    Game.createHens();
+        //create basket
+    Game.createBasket();
+        //Game.setLevels();
+        //Game.setBasket();
+        //loop on the hens and eggs
+    Game.bleach();
+    Game.catchEgg();
+    Game.moving();
+    }
+    ,
+    initMap: function(){
+        Game.setLevels();
+        Game.setBasket();
         
     }
     ,
@@ -67,10 +66,10 @@ Game.setTimer(Game.lvlTimer);
         timerobj.innerHTML = --score;
 
          if (score<=0)
-    {
-        timerobj.innerHTML = 'time out';
-        clearInterval(interval);
-    }
+        {
+            timerobj.innerHTML = 'time out';
+            clearInterval(interval);
+        }
         }, 1000);
     }
     ,
@@ -115,8 +114,7 @@ Game.setTimer(Game.lvlTimer);
         //Game.setRecord(eggsc,)
 
 
-}
-    
+    }
     ,
     setLevels: function(){
 
@@ -154,13 +152,9 @@ Game.setTimer(Game.lvlTimer);
 
         startelement.onclick = function(){
 
-        var page3elements = document.getElementsByClassName("page3");
-
-            while(page3elements[0])
-            {
-                page3elements[0].parentElement.removeChild(page3elements[0]); 
-            }
-            Game.createBasket(Game.selectedBasket);
+            Game.erasePage("page3");
+            Game.INGAME = true;
+            Game.initLevel();
     }
 
 
@@ -242,10 +236,26 @@ Game.setTimer(Game.lvlTimer);
             Game.selectBasket(basket1,0.5);
         
         }
-}
+
+        start.onclick = function(){
+
+        }
+    }
     ,
-    createBasket: function(basketsrc){
-        var myBasket = new myElement(basketsrc, 100,60,600,500, "basket","page4","img");
+    erasePage: function(className){
+        var pageElements = document.getElementsByClassName(className);
+
+        while(pageElements[0])
+            {
+                pageElements[0].parentElement.removeChild(pageElements[0]); 
+            }
+        Game.eggsList.splice(0, Game.eggsList.length);
+        Game.brokenList.splice(0, Game.brokenList.length);
+        Game.hensList.splice(0, Game.hensList.length);
+    }
+    ,
+    createBasket: function(){
+        var myBasket = new myElement(Game.selectedBasket, 100,60,600,500, "basket","page4","img");
         document.addEventListener("mousemove", function(e){
             var newx = e.clientX;
             if (newx >250 && newx < 950)
@@ -271,13 +281,13 @@ Game.setTimer(Game.lvlTimer);
         }, Game.EGG_MOVE_EVERY);
     }
     ,
-    createHens: function(num){
-        var n = num + 2;
+    createHens: function(){
+        var n = Game.level + 2;
         var diff = Game.bg_width/(n+2);
         var first_x = Game.bg_left + diff;
         for(var i=0; i<n; i++){
             generated_X = first_x + (diff*i);
-            var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"Hen","img");
+            var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"page4","img");
             Game.hensList.push(hen);
         };
         var bg = document.getElementById("img1");
@@ -285,42 +295,59 @@ Game.setTimer(Game.lvlTimer);
     }
     ,
     catchEgg: function(){
+        
         for(var i=0; i<Game.eggsList.length; i++){
-            console.log(Game.b.x)
-            if (Game.eggsList[i].y >= 400){
+            //console.log(Game.b.x)
+            if (Game.eggsList[i].y == 500){
                 
                 if (Game.eggsList[i].x > Game.b.x && Game.eggsList[i].x < (Game.b.x + Game.b.w))
                 {
-                    console.log("7amada");
+                    Game.eggsList[i].erase();
+                    Game.eggsList.splice(i, 1);
+                    Game.CATCHED_EGGS++;
+                    console.log(Game.CATCHED_EGGS);
+                    if (Game.CATCHED_EGGS == 20){
+                        Game.erasePage("page4");
+                        Game.level++;
+                        Game.INGAME = false;
+                        Game.CATCHED_EGGS = 0;
+                        Game.initMap();
+                    }
                 }
             }
         }
+        
         setTimeout(function(){
             Game.catchEgg();
-        }, 40);
+        }, 10);
+    
     }
     ,
-    bleach: function(num){
-        var m = num + 2;
-        //create an egg
-        var index;
-        var diff = Game.bg_width/(m+2);
-        var first_x = Game.bg_left + diff;
-    	do{
-            index = parseInt(Math.random() * m);
-    		generated_X = first_x + (diff*index);
-    	} while (Game.X_now == generated_X);
-    	Game.X_now = generated_X;
-    	var egg = new myElement("salma/egggg.png",15,22, generated_X ,150,"egg" + parseInt(Math.random() * 10000),"egg","img");
-        Game.eggsList.push(egg);
+    bleach: function(){
+        if (Game.INGAME){
+            var m = Game.level + 2;
+            //create an egg
+            var index;
+            var diff = Game.bg_width/(m+2);
+            var first_x = Game.bg_left + diff;
+            do{
+               index = parseInt(Math.random() * m);
+    		   generated_X = first_x + (diff*index);
+    	    } while (Game.X_now == generated_X);
+    	    Game.X_now = generated_X;
+            var egg = new myElement("pics/egggg.png",15,22, generated_X ,150,"egg" + parseInt(Math.random() * 10000),"page4","img");
+            Game.eggsList.push(egg);
 
-        //hen standing
-        Game.bleachHen(index);
+            //hen standing
+            Game.bleachHen(index);
 
-        //loop to create many
-        setTimeout(function(){
-        	Game.bleach(num);
-        }, Game.BLEACH_EVERY);
+            //loop to create many
+            if(Game.INGAME){
+                setTimeout(function(){
+        	       Game.bleach();
+                }, Game.BLEACH_EVERY);
+            }
+        }
     }
     ,
     bleachHen: function(i){
@@ -335,11 +362,11 @@ Game.setTimer(Game.lvlTimer);
     ,
     hatch: function(){
     	for(var i=0; i<Game.eggsList.length; i++){
-    		if (Game.eggsList[i].y >= 500){
+    		if (Game.eggsList[i].y >= 550){
     			var broken_x = Game.eggsList[i].x;
     			Game.eggsList[i].erase();
     			Game.eggsList.splice(i, 1);
-    			var brokenEgg = new myElement("salma/Un.png",30,40, broken_x ,500,"brokenEgg" + parseInt(Math.random() * 10000),"Egg","img");
+    			var brokenEgg = new myElement("pics/Un.png",30,40, broken_x ,550,"brokenEgg" + parseInt(Math.random() * 10000),"page4","img");
     			Game.brokenList.push(brokenEgg);
     			setTimeout(function(){
     				Game.brokenList[0].erase();Game.brokenList.shift();
@@ -352,4 +379,4 @@ Game.setTimer(Game.lvlTimer);
 
 //Game.initLevel(1);
 //Game.setLevels();
-Game.init(Game.level);
+Game.init();
