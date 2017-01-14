@@ -10,32 +10,39 @@ var Game = {
     BROKEN_DISAPPEAR_AFTER:2000,
     EGG_MOVE_EVERY: 30,
     EGG_STEP:5,
-    level:2,
+    level:1,
     bg_width:900,
     bg_height:550,
     bg_top:50,
     bg_left:200,
     selectedbasket:0,
     b:0,
+    CATCHED_EGGS:0,
+    INGAME:true,
 
-
-    init: function(l){
-    	Game.initLevel(l);
-        //Game.moving();
-        //Game.catchEgg();
+    init: function(){
+    	Game.initMap();
+        
+        
     }
     ,
-    initLevel: function(num){
+    initLevel: function(){
 
         //create hens
-    //Game.createHens(num);
+    Game.createHens();
         //create basket
-        //Game.createBasket();
+    Game.createBasket();
+        //Game.setLevels();
+        //Game.setBasket();
+        //loop on the hens and eggs
+    Game.bleach();
+    Game.catchEgg();
+    Game.moving();
+    }
+    ,
+    initMap: function(){
         Game.setLevels();
         Game.setBasket();
-        //loop on the hens and eggs
-   // Game.bleach(num);
-
     }
     ,
     setLevels: function(){
@@ -130,13 +137,22 @@ var Game = {
 
         start.onclick = function(){
 
-            var page3elements = document.getElementsByClassName("page3");
-
-            while(page3elements[0])
-            {
-                page3elements[0].parentElement.removeChild(page3elements[0]); 
-            }
+            Game.erasePage("page3");
+            Game.INGAME = true;
+            Game.initLevel();
         }
+    }
+    ,
+    erasePage: function(className){
+        var pageElements = document.getElementsByClassName(className);
+
+        while(pageElements[0])
+            {
+                pageElements[0].parentElement.removeChild(pageElements[0]); 
+            }
+        Game.eggsList.splice(0, Game.eggsList.length);
+        Game.brokenList.splice(0, Game.brokenList.length);
+        Game.hensList.splice(0, Game.hensList.length);
     }
     ,
     createBasket: function(){
@@ -166,13 +182,13 @@ var Game = {
         }, Game.EGG_MOVE_EVERY);
     }
     ,
-    createHens: function(num){
-        var n = num + 2;
+    createHens: function(){
+        var n = Game.level + 2;
         var diff = Game.bg_width/(n+2);
         var first_x = Game.bg_left + diff;
         for(var i=0; i<n; i++){
             generated_X = first_x + (diff*i);
-            var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"Hen");
+            var hen = new myElement("pics/cc1.png",70,90, generated_X-(70/2), 150 - 90,"hen" + i,"page4");
             Game.hensList.push(hen);
         };
         var bg = document.getElementById("img1");
@@ -180,42 +196,59 @@ var Game = {
     }
     ,
     catchEgg: function(){
+        
         for(var i=0; i<Game.eggsList.length; i++){
-            console.log(Game.b.x)
-            if (Game.eggsList[i].y >= 400){
+            //console.log(Game.b.x)
+            if (Game.eggsList[i].y == 500){
                 
                 if (Game.eggsList[i].x > Game.b.x && Game.eggsList[i].x < (Game.b.x + Game.b.w))
                 {
-                    console.log("7amada");
+                    Game.eggsList[i].erase();
+                    Game.eggsList.splice(i, 1);
+                    Game.CATCHED_EGGS++;
+                    console.log(Game.CATCHED_EGGS);
+                    if (Game.CATCHED_EGGS == 20){
+                        Game.erasePage("page4");
+                        Game.level++;
+                        Game.INGAME = false;
+                        Game.CATCHED_EGGS = 0;
+                        Game.initMap();
+                    }
                 }
             }
         }
+        
         setTimeout(function(){
             Game.catchEgg();
-        }, 40);
+        }, 10);
+    
     }
     ,
-    bleach: function(num){
-        var m = num + 2;
-        //create an egg
-        var index;
-        var diff = Game.bg_width/(m+2);
-        var first_x = Game.bg_left + diff;
-    	do{
-            index = parseInt(Math.random() * m);
-    		generated_X = first_x + (diff*index);
-    	} while (Game.X_now == generated_X);
-    	Game.X_now = generated_X;
-    	var egg = new myElement("pics/egggg.png",15,22, generated_X ,150,"egg" + parseInt(Math.random() * 10000),"egg");
-        Game.eggsList.push(egg);
+    bleach: function(){
+        if (Game.INGAME){
+            var m = Game.level + 2;
+            //create an egg
+            var index;
+            var diff = Game.bg_width/(m+2);
+            var first_x = Game.bg_left + diff;
+            do{
+               index = parseInt(Math.random() * m);
+    		   generated_X = first_x + (diff*index);
+    	    } while (Game.X_now == generated_X);
+    	    Game.X_now = generated_X;
+            var egg = new myElement("pics/egggg.png",15,22, generated_X ,150,"egg" + parseInt(Math.random() * 10000),"page4");
+            Game.eggsList.push(egg);
 
-        //hen standing
-        Game.bleachHen(index);
+            //hen standing
+            Game.bleachHen(index);
 
-        //loop to create many
-        setTimeout(function(){
-        	Game.bleach(num);
-        }, Game.BLEACH_EVERY);
+            //loop to create many
+            if(Game.INGAME){
+                setTimeout(function(){
+        	       Game.bleach();
+                }, Game.BLEACH_EVERY);
+            }
+        }
     }
     ,
     bleachHen: function(i){
@@ -230,11 +263,11 @@ var Game = {
     ,
     hatch: function(){
     	for(var i=0; i<Game.eggsList.length; i++){
-    		if (Game.eggsList[i].y >= 500){
+    		if (Game.eggsList[i].y >= 550){
     			var broken_x = Game.eggsList[i].x;
     			Game.eggsList[i].erase();
     			Game.eggsList.splice(i, 1);
-    			var brokenEgg = new myElement("pics/Un.png",30,40, broken_x ,500,"brokenEgg" + parseInt(Math.random() * 10000),"Egg");
+    			var brokenEgg = new myElement("pics/Un.png",30,40, broken_x ,550,"brokenEgg" + parseInt(Math.random() * 10000),"Egg");
     			Game.brokenList.push(brokenEgg);
     			setTimeout(function(){
     				Game.brokenList[0].erase();Game.brokenList.shift();
@@ -246,4 +279,4 @@ var Game = {
 }
 //Game.initLevel(1);
 //Game.setLevels();
-Game.init(Game.level);
+Game.init();

@@ -6,6 +6,7 @@ var myElement = function(source,w,h,x,y,ID,cls){
     this.y = y;
     this.ID = ID;
     this.cls = cls;
+    this.source=source;
     this.appendImg("div1");
 
     Object.defineProperty(this, 'y', {
