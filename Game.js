@@ -17,14 +17,15 @@ var Game = {
     bg_left:200,
     selectedBasket:"salma/basket.png",
     b:0,
+    CHECK:1,
+    interval:0,
 
-    eggS:10,
-    brokenS:10,
-    lifeS:10,
-    lvlScore:50,
-    lvlTimer:60,
+    LIVES:3,
     CATCHED_EGGS:0,
-    INGAME:true,
+    MAX_CATCHED_EGGS:5,
+    BROKEN_EGGS:0,
+    MAX_BROKEN_EGGS:10,
+    INGAME:false,
 
 
     init: function(){
@@ -37,7 +38,7 @@ var Game = {
         //create hens
 
     Game.setScoreBar();
-    Game.setTimer(Game.lvlTimer);
+    Game.setTimer();
     
     Game.createHens();
         //create basket
@@ -56,30 +57,52 @@ var Game = {
         
     }
     ,
-    setTimer: function(score){
+    setTimer: function(){
 
         var timer = new myElement("",35,50,1015,100,"timer","page4","p");
         timerobj = document.getElementById("timer");
+        timerobj.innerHTML = Game.MINUTES + ":" + Game.SECONDS;
+        Game.interval = setInterval(function() {
+            Game.SECONDS--;
+            if (Game.SECONDS < 0){
+                Game.MINUTES--;
+                Game.SECONDS=59; 
+            }
+            if (Game.MINUTES < 0)
+            {
+                Game.CHECK=0;
+                Game.endLevel();
 
-        var interval = setInterval(function() {
+                alert('time out. You lost');
+                Game.initLevel();
+            }
+            timerobj.innerHTML = Game.MINUTES + ":" + Game.SECONDS;
 
-        timerobj.innerHTML = --score;
 
-         if (score<=0)
-        {
-            timerobj.innerHTML = 'time out';
-            clearInterval(interval);
-        }
         }, 1000);
     }
     ,
-    setRecord: function(scoreobj,score){
+    setRecord: function(scoreobj){
      //   setInterval
-     scoreobj.innerHTML=score;
+     if (scoreobj.id == "score1"){
+        scoreobj.innerHTML = Game.CATCHED_EGGS;
+        scoreobj.innerHTML = scoreobj.innerHTML + "/" + Game.MAX_CATCHED_EGGS;   
+     }
+     else if (scoreobj.id == "score2"){
+        scoreobj.innerHTML = Game.BROKEN_EGGS;
+        scoreobj.innerHTML = scoreobj.innerHTML + "/" + Game.MAX_BROKEN_EGGS;
+     }
+     else if (scoreobj.id == "score3"){
+        scoreobj.innerHTML = Game.LIVES;
+     }
+      
+        //console.log(a);
        // score+=1;
-    //       setTimeout(function(){
-      //     Game.setRecord(scoreobj,score);
-       // }, 40);
+       if(Game.INGAME){
+        setTimeout(function(){
+           Game.setRecord(scoreobj);
+           console.log("I am here");
+       }, 40);}
     }
     ,
     setScoreBar: function(){
@@ -97,19 +120,19 @@ var Game = {
         
 
         eggscore = document.getElementById("score1");
-        Game.setRecord(eggscore,Game.eggS);
-        eggscore.innerHTML+='/';
-        eggscore.innerHTML+=Game.lvlScore;
+        //console.log(eggscore.id)
+        Game.setRecord(eggscore);
+        //eggscore.innerHTML+='/';
+        //eggscore.innerHTML+=Game.lvlScore;
         
         brokenscore = document.getElementById("score2");
-        Game.setRecord(brokenscore,Game.brokenS);
-        brokenscore.innerHTML+='/';
-        brokenscore.innerHTML+=Game.lvlScore;
+        Game.setRecord(brokenscore);
+        //brokenscore.innerHTML+='/';
+        //brokenscore.innerHTML+=Game.lvlScore;
 
         lifescore = document.getElementById("score3");
-        Game.setRecord(lifescore,Game.lifeS);
-        lifescore.innerHTML+='/';
-        lifescore.innerHTML+=Game.lvlScore;
+
+        Game.setRecord(lifescore);
         
         //Game.setRecord(eggsc,)
 
@@ -117,6 +140,7 @@ var Game = {
     }
     ,
     setLevels: function(){
+        Game.addLevelInfo();
 
         var x = new myElement("yasser/lvlname.png",470,570,400,70,"lvltree","page3","img");
 
@@ -237,9 +261,6 @@ var Game = {
         
         }
 
-        start.onclick = function(){
-
-        }
     }
     ,
     erasePage: function(className){
@@ -252,6 +273,8 @@ var Game = {
         Game.eggsList.splice(0, Game.eggsList.length);
         Game.brokenList.splice(0, Game.brokenList.length);
         Game.hensList.splice(0, Game.hensList.length);
+        Game.BROKEN_EGGS = 0;
+        Game.CATCHED_EGGS = 0;
     }
     ,
     createBasket: function(){
@@ -306,20 +329,18 @@ var Game = {
                     Game.eggsList.splice(i, 1);
                     Game.CATCHED_EGGS++;
                     console.log(Game.CATCHED_EGGS);
-                    if (Game.CATCHED_EGGS == 20){
+                    if (Game.CATCHED_EGGS >= Game.MAX_CATCHED_EGGS){
                         Game.erasePage("page4");
-                        Game.level++;
-                        Game.INGAME = false;
-                        Game.CATCHED_EGGS = 0;
+                        Game.endLevel();
                         Game.initMap();
                     }
                 }
             }
         }
-        
+        if(Game.INGAME){
         setTimeout(function(){
             Game.catchEgg();
-        }, 10);
+        }, 10);}
     
     }
     ,
@@ -361,6 +382,7 @@ var Game = {
     }
     ,
     hatch: function(){
+
     	for(var i=0; i<Game.eggsList.length; i++){
     		if (Game.eggsList[i].y >= 550){
     			var broken_x = Game.eggsList[i].x;
@@ -368,13 +390,84 @@ var Game = {
     			Game.eggsList.splice(i, 1);
     			var brokenEgg = new myElement("pics/Un.png",30,40, broken_x ,550,"brokenEgg" + parseInt(Math.random() * 10000),"page4","img");
     			Game.brokenList.push(brokenEgg);
+                
+
+                Game.BROKEN_EGGS++;
+                if (Game.BROKEN_EGGS == Game.MAX_BROKEN_EGGS)
+                {
+                    alert("You lost !!!");
+                    Game.CHECK=0;
+                    Game.endLevel();
+                    Game.initLevel();
+
+                }
+                
     			setTimeout(function(){
     				Game.brokenList[0].erase();Game.brokenList.shift();
-    			}, Game.BROKEN_DISAPPEAR_AFTER);
+    			     console.log("salma");
+                }, Game.BROKEN_DISAPPEAR_AFTER);
     		}
     	}
 
     }
+    ,
+    endLevel: function(){
+        if(Game.CHECK==0)
+        {
+            if(Game.LIVES==0)
+            {
+                alert("Game Over");
+            }
+            else
+            {
+                Game.LIVES--;
+                Game.addLevelInfo();
+                Game.setTimer();
+            }
+        }
+        else if(Game.CHECK==1)
+        {
+            Game.level++;
+            Game.INGAME=false;
+            
+        }
+        clearInterval(Game.interval);
+        Game.BROKEN_EGGS = 0;
+        Game.CATCHED_EGGS = 0;
+        var highestTimeoutId = setTimeout(";");
+        for (var i = 0 ; i < highestTimeoutId ; i++) {
+            clearTimeout(i); 
+        }
+        //Game.MINUTES = 0;
+        //Game.SECONDS = 0;
+                
+    }
+    ,
+    addLevelInfo: function(){
+        if(Game.level==1)
+        {
+            Game.MAX_CATCHED_EGGS = 10;
+            Game.MAX_BROKEN_EGGS = 20;
+            Game.MINUTES = 0;
+            Game.SECONDS = 20;
+        }
+        else if(Game.level==2)
+        {
+            Game.MAX_CATCHED_EGGS = 20;
+            Game.MAX_BROKEN_EGGS = 30;
+            Game.MINUTES = 1;
+            Game.SECONDS = 30;
+        }
+        else if(Game.level==3)
+        {
+            Game.MAX_CATCHED_EGGS = 30;
+            Game.MAX_BROKEN_EGGS = 40;
+            Game.MINUTES = 1;
+            Game.SECONDS = 15;
+        }
+    }
+    
+
 }
 
 //Game.initLevel(1);
