@@ -15,14 +15,16 @@ var Game = {
     bg_height:550,
     bg_top:50,
     bg_left:200,
-    selectedBasket:"",
+    selectedBasket:"salma/basket.png",
     b:0,
-    eggScore:0,
-    brokenScore:0,
-    lifeScore:0,
+    eggS:10,
+    brokenS:10,
+    lifeS:10,
+    lvlScore:50,
+    lvlTimer:60,
 
     init: function(l){
-//    	Game.initLevel(l);
+    	Game.initLevel(l);
        
 
        // divv.appendChild(val);
@@ -38,31 +40,47 @@ var Game = {
 
         //create hens
 
- //   Game.createHens(num);
+  //  Game.createHens(num);
         //create basket
- //       Game.createBasket("salma/basket.png");
+   //     Game.createBasket(Game.selectedBasket);
+
  //   Game.setLevels();
+
 //  Game.setBasket();
         //loop on the hens and eggs
- //   Game.bleach(num);
+//    Game.bleach(num);
 
 //Game.moving();
-//Game.setScoreBar();
-
-    //Game.createHens(num);
-        //create basket
-        //Game.createBasket();
-        Game.setLevels();
-        Game.setBasket();
-        //loop on the hens and eggs
-   // Game.bleach(num);
-
+Game.setScoreBar();
+Game.setTimer(Game.lvlTimer);
+    
+        
     }
     ,
-    setRecord: function(score,score1,score2){
-        score.innerHTML=score1
-        score.innerHTML+='/';
-        score.innerHTML+=score2;
+    setTimer: function(score){
+
+        var timer = new myElement("",35,50,1015,100,"timer","page4","p");
+        timerobj = document.getElementById("timer");
+
+        var interval = setInterval(function() {
+
+        timerobj.innerHTML = --score;
+
+         if (score<=0)
+    {
+        timerobj.innerHTML = 'time out';
+        clearInterval(interval);
+    }
+        }, 1000);
+    }
+    ,
+    setRecord: function(scoreobj,score){
+     //   setInterval
+     scoreobj.innerHTML=score;
+       // score+=1;
+    //       setTimeout(function(){
+      //     Game.setRecord(scoreobj,score);
+       // }, 40);
     }
     ,
     setScoreBar: function(){
@@ -71,13 +89,30 @@ var Game = {
         var egg = new myElement("salma/egggg.png",35,50,1015,200,"egg","page4","img");
         var brokenegg = new myElement("salma/Un.png",50,40,1010,320,"broken","page4","img");
 
-        var eggsc = new myElement("",30,30,1010,255,"score1","page4","p");
-
-        eggsc = document.getElementById("score1");
-        Game.setRecord(eggsc,)
+        var eggscr = new myElement("",30,30,1010,255,"score1","page4","p");
+        var brokenscr = new myElement("",30,30,1010,355,"score2","page4","p");
+        var lifescr = new myElement("",30,30,1010,475,"score3","page4","p");
 
         barobj = document.getElementById("bar");
         barobj.style.opacity=0.6;
+        
+
+        eggscore = document.getElementById("score1");
+        Game.setRecord(eggscore,Game.eggS);
+        eggscore.innerHTML+='/';
+        eggscore.innerHTML+=Game.lvlScore;
+        
+        brokenscore = document.getElementById("score2");
+        Game.setRecord(brokenscore,Game.brokenS);
+        brokenscore.innerHTML+='/';
+        brokenscore.innerHTML+=Game.lvlScore;
+
+        lifescore = document.getElementById("score3");
+        Game.setRecord(lifescore,Game.lifeS);
+        lifescore.innerHTML+='/';
+        lifescore.innerHTML+=Game.lvlScore;
+        
+        //Game.setRecord(eggsc,)
 
 
 }
@@ -85,23 +120,26 @@ var Game = {
     ,
     setLevels: function(){
 
-        var x = new myElement("salma/Leveltree.png",470,500,400,70,"lvltree","page3","img");
+        var x = new myElement("yasser/lvlname.png",470,570,400,70,"lvltree","page3","img");
 
+        var lvl1 = new myElement("yasser/level/1OFF.png",65,60,460,355,"lvl1","page3","img");
+        var lvl2 = new myElement("yasser/level/2OFF.png",65,60,505,250,"lvl2","page3","img");
+        var lvl3 = new myElement("yasser/level/3OFF.png",65,60,730,230,"lvl3","page3","img");
+        var lvl4 = new myElement("yasser/level/4OFF.png",65,60,600,185,"lvl4","page3","img");
+        var lvl5 = new myElement("yasser/level/5OFF.png",65,60,715,135,"lvl5","page3","img");
 
-        var lvl1 = new myElement("salma/level1gray.png",70,60,460,340,"lvl1","page3","img");
-        var lvl2 = new myElement("salma/level2trans.png",60,60,515,215,"lvl2","page3","img");
-        var lvl3 = new myElement("salma/level3trans.png",70,70,600,120,"lvl3","page3","img");
-
-        var badge1 = new myElement("salma/badge1.png",90,90,950,90,"badge1","page3","img");
-        var badge2 = new myElement("salma/badge2.png",90,90,950,220,"badge2","page3","img");
+        var badge1 = new myElement("yasser/badge1.png",90,90,950,90,"badge1","page3","img");
+        var badge2 = new myElement("yasser/badge2.png",90,90,950,220,"badge2","page3","img");
         //var lvl4 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
         //var lvl5 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
 
-
-    
-        var start = new myElement("salma/start.png",150,150,855,400,"start","page3","img");
-
+ 
+        var start = new myElement("yasser/level/Layer7.png",150,150,855,400,"start","page3","img");
         startelement = document.getElementById("start");
+
+        var text = new myElement("",30,60,880,405,"starttext","page3","p");
+        startText = document.getElementById("starttext");
+        startText.innerHTML="START";
 
         startelement.onmouseover = function(){
            // alert("salma");
@@ -113,18 +151,40 @@ var Game = {
             start.zoom(.8)
         
         }
+
+        startelement.onclick = function(){
+
+        var page3elements = document.getElementsByClassName("page3");
+
+            while(page3elements[0])
+            {
+                page3elements[0].parentElement.removeChild(page3elements[0]); 
+            }
+            Game.createBasket(Game.selectedBasket);
+    }
+
+
         if(Game.level==1)
         {
-            lvl1.source="salma/level1red.png";
+            lvl1.source="yasser/level/1.png";
         }
         else if(Game.level==2)
         {
-            lvl2.source="salma/level2red.png";
+            lvl2.source="yasser/level/2.png";
         }
         else if (Game.level==3)
         {
-            lvl3.source="salma/level3red.png";
+            lvl3.source="yasser/level/3.png";
         }
+         else if (Game.level==4)
+        {
+            lvl4.source="yasser/level/4.png";
+        }
+         else if (Game.level==5)
+        {
+            lvl5.source="yasser/level/5.png";
+        }
+
 
 
         }
@@ -136,8 +196,8 @@ var Game = {
  
     ,
     setBasket: function(){
-        var char1 = new myElement("salma/basket.png",100,100,260,150,"b1","page3","img");
-        var char2 = new myElement("salma/basket2.png",100,100,260,370,"b2","page3","img");
+        var char1 = new myElement("yasser/INGAME/basket/basket1.png",100,100,260,150,"b1","page3","img");
+        var char2 = new myElement("yasser/INGAME/basket/basket2.png",100,100,260,370,"b2","page3","img");
 
   //      var maindiv = document.getElementById("div1");
         //var arr=document.getElementsByClassName("page3");
@@ -145,6 +205,7 @@ var Game = {
         //maindiv.appendChild(arr);
         basket1=document.getElementById("b1");
         basket2=document.getElementById("b2");
+        Game.selectBasket(basket2,0.5);
         //basket1.alt="b 1";
 
         basket1.onmouseover = function(){
@@ -181,34 +242,6 @@ var Game = {
             Game.selectBasket(basket1,0.5);
         
         }
-
-        start.onclick = function(){
-
-
-          // var di=document.getElementById("div1");
-           var page3elements = document.getElementsByClassName("page3");
-
-           while(page3elements[0])
-           {
-
-           // alert(page3elements[0]);
-            page3elements[0].parentElement.removeChild(page3elements[0]);
-            //console.log(page3elements[i].parentNode.children);    
-
-             //alert("ggg");
-          }
-          Game.createBasket(selectedBasket);
-    
-
-            var page3elements = document.getElementsByClassName("page3");
-
-            while(page3elements[0])
-            {
-                page3elements[0].parentElement.removeChild(page3elements[0]); 
-            }
-        }
-
-    }
 }
     ,
     createBasket: function(basketsrc){
@@ -316,6 +349,7 @@ var Game = {
 
     }
 }
+
 //Game.initLevel(1);
 //Game.setLevels();
-//Game.init(Game.level);
+Game.init(Game.level);
