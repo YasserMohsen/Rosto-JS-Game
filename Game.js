@@ -98,13 +98,13 @@ var Game = {
         scoreobj.innerHTML = Game.LIVES;
      }
       
-        //console.log(a);
-       // score+=1;
+
        if(Game.INGAME){
         setTimeout(function(){
            Game.setRecord(scoreobj);
            console.log("I am here");
        }, 40);}
+
     }
     ,
     setScoreBar: function(){
@@ -126,6 +126,7 @@ var Game = {
         Game.setRecord(eggscore);
         //eggscore.innerHTML+='/';
         //eggscore.innerHTML+=Game.lvlScore;
+
         
         brokenscore = document.getElementById("score2");
         Game.setRecord(brokenscore);
@@ -262,6 +263,7 @@ var Game = {
             Game.selectBasket(basket1,0.5);
         
         }
+
 
     }
     ,
