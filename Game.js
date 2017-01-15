@@ -77,9 +77,10 @@ var Game = {
      //   setInterval
      scoreobj.innerHTML=score;
        // score+=1;
-    //       setTimeout(function(){
-      //     Game.setRecord(scoreobj,score);
-       // }, 40);
+      //    var interval = setInterval(function(){
+
+        //  Game.setRecord(scoreobj,score);
+        //}, 20);
     }
     ,
     setScoreBar: function(){
@@ -97,7 +98,7 @@ var Game = {
         
 
         eggscore = document.getElementById("score1");
-        Game.setRecord(eggscore,Game.eggS);
+        Game.setRecord(eggscore,Game.CATCHED_EGGS);
         eggscore.innerHTML+='/';
         eggscore.innerHTML+=Game.lvlScore;
         
@@ -237,9 +238,7 @@ var Game = {
         
         }
 
-        start.onclick = function(){
-
-        }
+    
     }
     ,
     erasePage: function(className){
