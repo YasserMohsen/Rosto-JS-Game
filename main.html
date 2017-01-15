@@ -4,15 +4,15 @@
 	<title>Rosto</title>
 	<style type="text/css">
 	body
-	{ 
+	{
 		background-image: url("pics/gamebg.png");
   	}
-		
+
 		img{
 			position:absolute;
     		max-width: 100%;
 		}
-		
+
 		b{
 			position:absolute;
     		max-width: 100%;
@@ -27,7 +27,7 @@
     		max-width: 100%;
 		}
 		#img1{
-			
+
 			border-radius: 25px;
     		position: absolute;
     		filter: blur(4px);
@@ -40,9 +40,29 @@
 		    animation-duration:3s;*/
 
 		}
+		#img2
+		{
+		top: 85px;
+		left: 300px;
+		width: 750px;
+		height: 270px;
+		}
+		#progress1{
+			position: relative;
+			top: 420px;
+			left: 435px;
+			width: 403px;
+			height: 35px;
+		  color: #F0F8FF;
+      border: 2px solid #8B4513;
+			background: #F0F8FF;
+
+		}
+
 		/*@keyframes ex{
 			0%{filter: blur(4px);}
-			100%{filter: blur(0px);}	
+			100%{filter: blur(0px);}
+
 		}*/
 
 		</style>
@@ -50,13 +70,12 @@
 <body>
 	<div id="div1">
 		<img src="images/INGAME/background.png" id="img1">
+		<img src="images/logo/LOGO.png" id="img2" class="page1">
+		<progress value="0" max="100" id="progress1" class="page1" ><span>0</span>%</progress>
 
 	</div>
-	
-
-
-
-<script src="myElement.js"></script>
-<script src="Game.js"></script>
+	<script src="progressbar.js"></script>
+ <script src="myElement.js"></script>
+ <script src="Game.js"></script>
 </body>
 </html>
