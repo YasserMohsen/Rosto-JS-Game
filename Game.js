@@ -153,6 +153,7 @@ var Game = {
            Game.setRecord(scoreobj);
            console.log("set record");
        }, 40);}
+
     }
     ,
     setScoreBar: function(){
@@ -292,6 +293,7 @@ var Game = {
             Game.selectBasket(basket1,0.5);
         
         }
+
 
     }
     ,
