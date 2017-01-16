@@ -34,18 +34,18 @@ var Game = {
 
     init: function(){
     	Game.initMap();
-        
+
     }
     ,
     initLevel: function(){
 
-        
+
         Game.CHECK=1;
         document.getElementById("div1").style.cursor = "none";
-    
-    
+
+
     Game.createHens();
-        
+
     Game.createBasket();
     Game.setScoreBar();
     Game.setTimer();
@@ -55,10 +55,79 @@ var Game = {
     Game.moving();
     }
     ,
+    menuInit: function(){
+      var main= new myElement("images/choicepanel.png",370,494,465,96,"mainmenu","page2","img");
+      var newGame = new myElement("images/MainMenu/NewGame.png",228,74,538,126,"newgame","page2","img");
+      var inst = new myElement("images/MainMenu/instructions.png",228,74,538,222,"instructions","page2","img");
+      var about = new myElement("images/MainMenu/About.png",207,65,545,325,"about","page2","img");
+      var exit = new myElement("images/MainMenu/Exit.png",207,65,545,425,"exit","page2","img");
+
+      var ng = document.getElementById("newgame");
+      var ins = document.getElementById("instructions");
+      var abt = document.getElementById("about");
+      var ex = document.getElementById("exit");
+
+      ng.onmouseover = function(){newGame.zoom(1.25);}
+      ng.onmouseleave = function(){newGame.zoom(0.8);}
+
+      ins.onmouseover = function(){inst.zoom(1.25);}
+      ins.onmouseleave = function(){inst.zoom(0.8);}
+
+      abt.onmouseover = function(){about.zoom(1.25);}
+      abt.onmouseleave = function(){about.zoom(0.8);}
+
+      ex.onmouseover = function(){exit.zoom(1.25);}
+      ex.onmouseleave = function(){exit.zoom(0.8);}
+
+      ng.onclick = function(){
+        Game.erasePage("page2");
+        Game.initMap();}
+
+      ins.onclick = function(){
+        Game.erasePage("page2");
+        Game.initInstructions();
+      }
+      abt.onclick = function(){
+        Game.erasePage("page2");
+        Game.initAbout();
+     }
+
+     ex.onclick = function(){
+       window.close();
+   }
+ }
+    ,
+    initInstructions: function(){
+    var gameInst= new myElement("",800,470,280,75,"inst","ginst","p");
+     g = document.getElementById("inst");
+    g.innerHTML="<h1> Rosto Game instructions </h1><h3>Objectives<h3> player need to collect a spcified number of eggs in  the basket. player shouldn't exceeds the determined number of broken eggs or the timer for not losing a life. after the player loses three lifes will get gameover<h3>setup:<h3> It's recomended to use google chrome browser ";
+    var back= new myElement("images/back.png",100,60,545,525,"back","ginst","img");
+    var backButton = document.getElementById("back");
+    backButton.onmouseover = function(){back.zoom(1.25);}
+    backButton.onmouseleave = function(){back.zoom(0.8);}
+    backButton.onclick = function(){
+    Game.erasePage("ginst");
+    Game.menuInit();}
+    }
+    ,
+    initAbout: function(){
+      var gameAbout= new myElement("",800,470,280,75,"about","gabout","p");
+      var abouttext= document.getElementById("about");
+      abouttext.innerHTML="<h1> Rosto Game </h1><h3> Developed by: <h3> <ol> <li> Yaser Mohsen Ahmed</li> <li> Salma Mohamed Ahmed</li> <li> AbdElrahman Salah AbdElKarem</li> </ol>";
+      var back= new myElement("images/back.png",100,60,545,525,"back","gabout","img");
+      var backButton = document.getElementById("back");
+      backButton.onmouseover = function(){back.zoom(1.25);}
+      backButton.onmouseleave = function(){back.zoom(0.8);}
+      backButton.onclick = function(){
+      Game.erasePage("gabout");
+      Game.menuInit();}
+
+    }
+    ,
     initMap: function(){
         Game.setLevels();
         Game.setBasket();
-        
+
     }
     ,
     styleTime: function(min,sec){
@@ -82,7 +151,7 @@ var Game = {
             Game.SECONDS--;
             if (Game.SECONDS < 0){
                 Game.MINUTES--;
-                Game.SECONDS=59; 
+                Game.SECONDS=59;
             }
             timerobj.innerHTML = Game.styleTime(Game.MINUTES,Game.SECONDS);
             if (Game.MINUTES < 0)
@@ -100,7 +169,7 @@ var Game = {
                 }
                 timerobj.innerHTML = Game.styleTime(0,0);
             }
-            
+
 
 
         }, 1000);
@@ -127,7 +196,7 @@ var Game = {
                         else if (buttoncontent=="Try again")
                         {
                             Game.initLevel();
-                        }               
+                        }
                         else if (buttoncontent=="Continue")
                         {
                             Game.initMap();
@@ -138,7 +207,7 @@ var Game = {
     setRecord: function(scoreobj){
      if (scoreobj.id == "score1"){
         scoreobj.innerHTML = Game.CATCHED_EGGS;
-        scoreobj.innerHTML = scoreobj.innerHTML + "/" + Game.MAX_CATCHED_EGGS;   
+        scoreobj.innerHTML = scoreobj.innerHTML + "/" + Game.MAX_CATCHED_EGGS;
      }
      else if (scoreobj.id == "score2"){
         scoreobj.innerHTML = Game.BROKEN_EGGS;
@@ -147,7 +216,7 @@ var Game = {
      else if (scoreobj.id == "score3"){
         scoreobj.innerHTML = Game.LIVES;
      }
-      
+
        if(Game.INGAME){
         setTimeout(function(){
            Game.setRecord(scoreobj);
@@ -168,11 +237,11 @@ var Game = {
 
         barobj = document.getElementById("bar");
         barobj.style.opacity=0.6;
-        
+
 
         eggscore = document.getElementById("score1");
         Game.setRecord(eggscore);
-        
+
         brokenscore = document.getElementById("score2");
         Game.setRecord(brokenscore);
 
@@ -199,18 +268,18 @@ var Game = {
         //var lvl4 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
         //var lvl5 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
 
- 
+
         var start = new myElement("images/level/Layer77.png",150,150,855,400,"start","page3","img");
         startelement = document.getElementById("start");
 
         startelement.onmouseover = function(){
            start.zoom(1.25);
-         
+
         }
 
         startelement.onmouseleave = function(){
             start.zoom(.8)
-        
+
         }
 
         startelement.onclick = function(){
@@ -250,7 +319,7 @@ var Game = {
         {
             baskobj.style.opacity=rate;
         }
- 
+
     ,
     setBasket: function(){
         var char1 = new myElement("images/INGAME/basket/basket1.png",100,45,260,150,"b1","page3","img");
@@ -259,26 +328,26 @@ var Game = {
         basket1=document.getElementById("b1");
         basket2=document.getElementById("b2");
         Game.selectBasket(basket2,0.5);
-        
+
 
         basket1.onmouseover = function(){
            char1.zoom(1.25);
-         
+
         }
 
         basket1.onmouseleave = function(){
             char1.zoom(.8)
-        
+
         }
 
          basket2.onmouseover = function(){
            char2.zoom(1.25);
-         
+
         }
 
         basket2.onmouseleave = function(){
             char2.zoom(.8)
-        
+
         }
 
         basket1.onclick = function(){
@@ -291,7 +360,7 @@ var Game = {
             Game.selectedBasket=char2.source;
             Game.selectBasket(basket2,1);
             Game.selectBasket(basket1,0.5);
-        
+
         }
 
 
@@ -302,7 +371,7 @@ var Game = {
 
         while(pageElements[0])
             {
-                pageElements[0].parentElement.removeChild(pageElements[0]); 
+                pageElements[0].parentElement.removeChild(pageElements[0]);
             }
         Game.eggsList.splice(0, Game.eggsList.length);
         Game.brokenList.splice(0, Game.brokenList.length);
@@ -317,7 +386,7 @@ var Game = {
         document.addEventListener("mousemove", function(e){
             var newx = e.clientX;
             if (newx >250 && newx < 950)
-            {   
+            {
                 myBasket.x = e.clientX;
             }
         }, false);
@@ -329,7 +398,7 @@ var Game = {
         {
     		Game.eggsList[i].move(newY);
     	}
-    }    
+    }
     ,
     moving: function(){
         if (Game.CHECK == 1){
@@ -357,11 +426,11 @@ var Game = {
     }
     ,
     catchEgg: function(){
-        
+
         for(var i=0; i<Game.eggsList.length; i++){
             //console.log(Game.b.x)
             if (Game.eggsList[i].y == 510){
-                
+
                 if (Game.eggsList[i].x > Game.b.x && Game.eggsList[i].x < (Game.b.x + Game.b.w))
                 {
                     Game.eggsListInRow.push(Game.eggsList[i]);
@@ -369,11 +438,11 @@ var Game = {
                     {
                         Game.MAX_EGGS_IN_ROW = Game.eggsListInRow.length;
                     }
-                    
+
                     Game.eggsList[i].erase();
                     Game.eggsList.splice(i, 1);
                     Game.CATCHED_EGGS++;
-                    
+
                     console.log(Game.CATCHED_EGGS);
                     if (Game.CATCHED_EGGS >= Game.MAX_CATCHED_EGGS){
                         Game.endTimeouts();
@@ -388,7 +457,7 @@ var Game = {
             console.log("catcheggs")
         }, 10);}
 
-    
+
     }
     ,
     bleach: function(){
@@ -438,7 +507,7 @@ var Game = {
     			Game.eggsList.splice(i, 1);
     			var brokenEgg = new myElement("images/broken-egg.png",50,18, broken_x ,550,"brokenEgg" + parseInt(Math.random() * 10000),"page4","img");
     			Game.brokenList.push(brokenEgg);
-                
+
 
                 Game.BROKEN_EGGS++;
                 Game.eggsListInRow.splice(0, Game.eggsListInRow.length);
@@ -450,15 +519,15 @@ var Game = {
                     Game.endTimeouts();
                     if (Game.LIVES == 0)
                     {
-                        Game.createDialog("Game Over !!", "Back to Home");    
+                        Game.createDialog("Game Over !!", "Back to Home");
                     }
                     else
                     {
-                        Game.createDialog("You Lost !!", "Try again");        
+                        Game.createDialog("You Lost !!", "Try again");
                     }
 
                 }
-                
+
     			setTimeout(function(){
     				Game.brokenList[0].erase();Game.brokenList.shift();
                     console.log("hatch");
@@ -495,11 +564,11 @@ var Game = {
         clearInterval(Game.interval);
         Game.BROKEN_EGGS = 0;
         Game.CATCHED_EGGS = 0;
-        /* 
+        /*
         }*/
         //Game.MINUTES = 0;
         //Game.SECONDS = 0;
-                
+
     }
     ,
     updateBadges: function()
@@ -545,8 +614,9 @@ var Game = {
             clearTimeout(i);
         }
     }
-    
+
 
 }
-
-Game.init();
+//Game.initInstructions();
+Game.menuInit();
+//Game.init();
