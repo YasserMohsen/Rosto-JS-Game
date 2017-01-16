@@ -2,6 +2,8 @@ var Game = {
     eggsList: [],
     brokenList: [],
     hensList: [],
+    eggsListInRow: [],
+    MAX_EGGS_IN_ROW:0,
     timeMoving:0,
     timeBleach:0,
     X_now:0,
@@ -27,6 +29,8 @@ var Game = {
     MAX_BROKEN_EGGS:10,
     INGAME:false,
 
+    B1:"images/badge1OFF.png",
+    B2:"images/badge2OFF.png",
 
     init: function(){
     	Game.initMap();
@@ -35,19 +39,17 @@ var Game = {
     ,
     initLevel: function(){
 
-        //create hens
+        
         Game.CHECK=1;
-    
+        document.getElementById("div1").style.cursor = "none";
     
     
     Game.createHens();
-        //create basket
+        
     Game.createBasket();
     Game.setScoreBar();
     Game.setTimer();
-        //Game.setLevels();
-        //Game.setBasket();
-        //loop on the hens and eggs
+
     Game.bleach();
     Game.catchEgg();
     Game.moving();
@@ -59,33 +61,81 @@ var Game = {
         
     }
     ,
+    styleTime: function(min,sec){
+        if (min < 10)
+        {
+            min = "0" + min;
+        }
+        if (sec < 10)
+        {
+            sec = "0" + sec;
+        }
+        return min + ":" + sec
+    }
+    ,
     setTimer: function(){
 
         var timer = new myElement("",35,50,1015,100,"timer","page4","p");
         timerobj = document.getElementById("timer");
-        timerobj.innerHTML = Game.MINUTES + ":" + Game.SECONDS;
+        timerobj.innerHTML = Game.styleTime(Game.MINUTES,Game.SECONDS);
         Game.interval = setInterval(function() {
             Game.SECONDS--;
             if (Game.SECONDS < 0){
                 Game.MINUTES--;
                 Game.SECONDS=59; 
             }
+            timerobj.innerHTML = Game.styleTime(Game.MINUTES,Game.SECONDS);
             if (Game.MINUTES < 0)
             {
                 Game.CHECK=0;
-                Game.endLevel();
-
-                alert('time out. You lost');
-                //Game.initLevel();
+                Game.endTimeouts();
+                clearInterval(Game.interval);
+                if (Game.LIVES == 0)
+                {
+                    Game.createDialog("Game Over !!", "Back to Home");
+                }
+                else
+                {
+                    Game.createDialog("Timeout !! YOU LOST", "Try again");
+                }
+                timerobj.innerHTML = Game.styleTime(0,0);
             }
-            timerobj.innerHTML = Game.MINUTES + ":" + Game.SECONDS;
+            
 
 
         }, 1000);
     }
     ,
+    createDialog: function(dialogcontent,buttoncontent){
+        var dialog = new myElement("",400,200,450,220,"dialogbox","page4","div");
+
+        var button = new myElement("",90,30,680,355,"b","page4","button");
+        buttonobj = document.getElementById("b");
+        buttonobj.innerHTML=buttoncontent;
+
+        var text = new myElement("",100,100,550,270,"label1","page4","label");
+        textobj = document.getElementById("label1");
+        textobj.innerHTML=dialogcontent;
+
+        buttonobj.onclick= function(){
+                        Game.erasePage("page4");
+                        Game.endLevel();
+                        if (buttoncontent=="Back to Home")
+                        {
+                            Game.init();
+                        }
+                        else if (buttoncontent=="Try again")
+                        {
+                            Game.initLevel();
+                        }               
+                        else if (buttoncontent=="Continue")
+                        {
+                            Game.initMap();
+                        }
+        }
+    }
+    ,
     setRecord: function(scoreobj){
-     //   setInterval
      if (scoreobj.id == "score1"){
         scoreobj.innerHTML = Game.CATCHED_EGGS;
         scoreobj.innerHTML = scoreobj.innerHTML + "/" + Game.MAX_CATCHED_EGGS;   
@@ -98,20 +148,18 @@ var Game = {
         scoreobj.innerHTML = Game.LIVES;
      }
       
-        //console.log(a);
-       // score+=1;
        if(Game.INGAME){
         setTimeout(function(){
            Game.setRecord(scoreobj);
-           console.log("I am here");
+           console.log("set record");
        }, 40);}
     }
     ,
     setScoreBar: function(){
         var bar = new myElement("salma/rect.png",110,528,980,60,"bar","page4","img");
-        var life = new myElement("salma/heart.png",50,45,1010,435,"heart","page4","img");
+        var life = new myElement("salma/heart.png",40,35,1010,435,"heart","page4","img");
         var egg = new myElement("images/normal-egg.png",35,50,1015,200,"egg","page4","img");
-        var brokenegg = new myElement("images/broken-egg.png",50,40,1010,320,"broken","page4","img");
+        var brokenegg = new myElement("images/broken-egg.png",60,25,1010,320,"broken","page4","img");
 
         var eggscr = new myElement("",30,30,1010,255,"score1","page4","p");
         var brokenscr = new myElement("",30,30,1010,355,"score2","page4","p");
@@ -122,21 +170,14 @@ var Game = {
         
 
         eggscore = document.getElementById("score1");
-        //console.log(eggscore.id)
         Game.setRecord(eggscore);
-        //eggscore.innerHTML+='/';
-        //eggscore.innerHTML+=Game.lvlScore;
         
         brokenscore = document.getElementById("score2");
         Game.setRecord(brokenscore);
-        //brokenscore.innerHTML+='/';
-        //brokenscore.innerHTML+=Game.lvlScore;
 
         lifescore = document.getElementById("score3");
 
         Game.setRecord(lifescore);
-        
-        //Game.setRecord(eggsc,)
 
 
     }
@@ -152,21 +193,16 @@ var Game = {
         var lvl4 = new myElement("images/level/4OFF.png",65,60,600,185,"lvl4","page3","img");
         var lvl5 = new myElement("images/level/5OFF.png",65,60,715,135,"lvl5","page3","img");
 
-        var badge1 = new myElement("images/badge1.png",90,90,950,90,"badge1","page3","img");
-        var badge2 = new myElement("images/badge2.png",90,90,950,220,"badge2","page3","img");
+        var badge1 = new myElement(Game.B1,90,90,950,90,"badge1","page3","img");
+        var badge2 = new myElement(Game.B2,90,90,950,220,"badge2","page3","img");
         //var lvl4 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
         //var lvl5 = new myElement("pics/editedpics/level3trans.png",80,80,700,290,"lvl3","page3");
 
  
-        var start = new myElement("images/level/Layer7.png",150,150,855,400,"start","page3","img");
+        var start = new myElement("images/level/Layer77.png",150,150,855,400,"start","page3","img");
         startelement = document.getElementById("start");
 
-        var text = new myElement("",30,60,880,405,"starttext","page3","p");
-        startText = document.getElementById("starttext");
-        startText.innerHTML="START";
-
         startelement.onmouseover = function(){
-           // alert("salma");
            start.zoom(1.25);
          
         }
@@ -219,17 +255,12 @@ var Game = {
         var char1 = new myElement("images/INGAME/basket/basket1.png",100,45,260,150,"b1","page3","img");
         var char2 = new myElement("images/INGAME/basket/basket2.png",100,45,260,370,"b2","page3","img");
 
-  //      var maindiv = document.getElementById("div1");
-        //var arr=document.getElementsByClassName("page3");
-
-        //maindiv.appendChild(arr);
         basket1=document.getElementById("b1");
         basket2=document.getElementById("b2");
         Game.selectBasket(basket2,0.5);
-        //basket1.alt="b 1";
+        
 
         basket1.onmouseover = function(){
-           // alert("salma");
            char1.zoom(1.25);
          
         }
@@ -240,7 +271,6 @@ var Game = {
         }
 
          basket2.onmouseover = function(){
-           // alert("salma");
            char2.zoom(1.25);
          
         }
@@ -275,9 +305,7 @@ var Game = {
         Game.eggsList.splice(0, Game.eggsList.length);
         Game.brokenList.splice(0, Game.brokenList.length);
         Game.hensList.splice(0, Game.hensList.length);
-        Game.endTimeouts();
-        //Game.BROKEN_EGGS = 0;
-        //Game.CATCHED_EGGS = 0;
+        //Game.endTimeouts();
     }
     ,
     createBasket: function(){
@@ -302,12 +330,16 @@ var Game = {
     }    
     ,
     moving: function(){
-        Game.update_Y(Game.EGG_STEP);
-        Game.hatch();
-        setTimeout(function(){
-        	Game.moving();
-        }, Game.EGG_MOVE_EVERY);
+        if (Game.CHECK == 1){
+            Game.update_Y(Game.EGG_STEP);
+            Game.hatch();
+            setTimeout(function(){
+        	   Game.moving();
+               console.log("moving");
+            }, Game.EGG_MOVE_EVERY);
+        }
     }
+
     ,
     createHens: function(){
         var n = Game.level + 2;
@@ -330,14 +362,20 @@ var Game = {
                 
                 if (Game.eggsList[i].x > Game.b.x && Game.eggsList[i].x < (Game.b.x + Game.b.w))
                 {
+                    Game.eggsListInRow.push(Game.eggsList[i]);
+                    if (Game.MAX_EGGS_IN_ROW < Game.eggsListInRow.length)
+                    {
+                        Game.MAX_EGGS_IN_ROW = Game.eggsListInRow.length;
+                    }
+                    
                     Game.eggsList[i].erase();
                     Game.eggsList.splice(i, 1);
                     Game.CATCHED_EGGS++;
+                    
                     console.log(Game.CATCHED_EGGS);
                     if (Game.CATCHED_EGGS >= Game.MAX_CATCHED_EGGS){
-                        Game.erasePage("page4");
-                        Game.endLevel();
-                        Game.initMap();
+                        Game.endTimeouts();
+                        Game.createDialog("GONGRATULATIONS !! You passed level " + Game.level,"Continue")
                     }
                 }
             }
@@ -345,7 +383,9 @@ var Game = {
         if(Game.INGAME){
         setTimeout(function(){
             Game.catchEgg();
+            console.log("catcheggs")
         }, 10);}
+
     
     }
     ,
@@ -371,6 +411,7 @@ var Game = {
             if(Game.INGAME){
                 setTimeout(function(){
         	       Game.bleach();
+                   console.log("bleach");
                 }, Game.BLEACH_EVERY);
             }
         }
@@ -398,18 +439,27 @@ var Game = {
                 
 
                 Game.BROKEN_EGGS++;
+                Game.eggsListInRow.splice(0, Game.eggsListInRow.length);
                 if (Game.BROKEN_EGGS == Game.MAX_BROKEN_EGGS)
                 {
-                    alert("You lost !!!");
+                    //alert("You lost !!!");
                     Game.CHECK=0;
-                    Game.endLevel();
-                    //Game.initLevel();
+
+                    Game.endTimeouts();
+                    if (Game.LIVES == 0)
+                    {
+                        Game.createDialog("Game Over !!", "Back to Home");    
+                    }
+                    else
+                    {
+                        Game.createDialog("You Lost !!", "Try again");        
+                    }
 
                 }
                 
     			setTimeout(function(){
     				Game.brokenList[0].erase();Game.brokenList.shift();
-    			     console.log("salma");
+                    console.log("hatch");
                 }, Game.BROKEN_DISAPPEAR_AFTER);
     		}
     	}
@@ -417,21 +467,20 @@ var Game = {
     }
     ,
     endLevel: function(){
+        document.getElementById("div1").style.cursor = "default";
+        Game.updateBadges();
         if(Game.CHECK==0)
         {
             if(Game.LIVES==0)
             {
-                alert("Game Over");
-                Game.erasePage("page4");
                 Game.LIVES=3;
                 Game.level=1;
-                Game.init();
+                Game.INGAME=false;
             }
             else
             {
                 Game.LIVES--;
                 Game.addLevelInfo();
-                Game.setTimer();
                 Game.CHECK=1;
             }
         }
@@ -439,8 +488,8 @@ var Game = {
         {
             Game.level++;
             Game.INGAME=false;
-            
         }
+
         clearInterval(Game.interval);
         Game.BROKEN_EGGS = 0;
         Game.CATCHED_EGGS = 0;
@@ -451,11 +500,23 @@ var Game = {
                 
     }
     ,
+    updateBadges: function()
+    {
+        if (Game.CHECK == 1 && Game.BROKEN_EGGS < 5)
+            {
+                Game.B1 = "images/badge1.png";
+            }
+        if (Game.CHECK == 1 && Game.MAX_EGGS_IN_ROW >= 10)
+        {
+            Game.B2 = "images/badge2.png";
+        }
+    }
+    ,
     addLevelInfo: function(){
         if(Game.level==1)
         {
             Game.MAX_CATCHED_EGGS = 10;
-            Game.MAX_BROKEN_EGGS = 20;
+            Game.MAX_BROKEN_EGGS = 10;
             Game.MINUTES = 0;
             Game.SECONDS = 20;
         }
@@ -464,7 +525,7 @@ var Game = {
             Game.MAX_CATCHED_EGGS = 20;
             Game.MAX_BROKEN_EGGS = 30;
             Game.MINUTES = 1;
-            Game.SECONDS = 30;
+            Game.SECONDS = 0;
         }
         else if(Game.level==3)
         {
@@ -476,6 +537,7 @@ var Game = {
     }
     ,
     endTimeouts: function(){
+
         var highestTimeoutId = setTimeout(";");
         for (var i = 0 ; i < highestTimeoutId ; i++) {
             clearTimeout(i);
@@ -485,6 +547,4 @@ var Game = {
 
 }
 
-//Game.initLevel(1);
-//Game.setLevels();
 Game.init();
