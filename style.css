@@ -1,0 +1,94 @@
+body
+	{
+		background-image: url("images/gamebg.png");
+  	}
+
+img{
+	position:absolute;
+	max-width: 100%;
+}
+
+b{
+	position:absolute;
+	max-width: 100%;
+	color: white;
+}
+
+p{
+	font-family:"Courier New";
+	font-size:20px;
+	color:white;
+	position:absolute;
+	max-width: 100%;
+}
+#img1{
+
+	border-radius: 25px;
+	position: absolute;
+	filter: blur(4px);
+	top: 50px;
+	left: 200px;
+	width: 900px;
+    height: 550px;
+    z-index: -1;
+    animation-name:ex;
+    animation-duration:5s;
+
+}
+#start{
+	position: absolute;
+}
+label{
+position:absolute;
+}
+
+#dialogbox{
+background-image: url("images/dialoge.png");
+position:absolute;
+}
+
+button{
+	position:absolute;
+	background-color: #808000;
+	border: none;
+}
+
+	dialog{
+	outline: 0 none;
+padding: 0 !important;
+	position:absolute;
+background:#e8e8e8;
+border: 1px solid #dadada;
+font-family:sans-serif;
+
+
+}
+
+#img2
+{
+top: 85px;
+left: 300px;
+width: 750px;
+height: 270px;
+}
+#progress1{
+	position: relative;
+	top: 420px;
+	left: 435px;
+	width: 403px;
+	height: 35px;
+  color: #F0F8FF;
+border: 2px solid #8B4513;
+	background: #F0F8FF;
+
+}
+
+@keyframes ex{
+	0%{filter: blur(4px);}
+	100%{filter: blur(0px);}
+
+}
+#label1{
+	color: #FFFFFF;
+	text-align: center;
+}

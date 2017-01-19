@@ -14,7 +14,6 @@ var Game = {
     BROKEN_DISAPPEAR_AFTER:2000,
     EGG_MOVE_EVERY: 30,
     EGG_STEP:5,
-    level:1,
     bg_width:900,
     bg_height:550,
     bg_top:50,
@@ -25,7 +24,6 @@ var Game = {
     interval:0,
     FLAG:0,
 
-    LIVES:3,
     CATCHED_COL_EGGS:0,
     CATCHED_EGGS:0,
     MAX_CATCHED_EGGS:0,
@@ -33,20 +31,31 @@ var Game = {
     MAX_BROKEN_EGGS:0,
     INGAME:false,
 
-    TOTAL_SCORE:0,
-    //SCORELIST: [0,0,0],
-    SCORE_1:0,
-    SCORE_2:0,
-    SCORE_3:0,
 
-    B1:"images/badge1OFF.png",
-    B2:"images/badge2OFF.png",
-    B3:"images/badge3OFF.png",
+    initValues: function(){
+        Game.level=1;
+        Game.LIVES=3;
+        Game.TOTAL_SCORE=0;
+        Game.SCORE_1=0;
+        Game.SCORE_2=0;
+        Game.SCORE_3=0;
+
+        Game.B1="images/badge1OFF.png";
+        Game.B1_flag= false;
+        //B1_str: "LESS THAN 5 BROKEN EGGS badge :D",
+        Game.B2="images/badge2OFF.png";
+        Game.B2_flag= false;
+        //B2_str: "MORE THAN 10 EGGS IN ROW badge ;)",
+        Game.B3="images/badge3OFF.png";
+        Game.B3_flag= false;
+        //B3_str: "MORE THAN 2 COLORED EGGS badge <3",
+    }
+    ,
     init: function(){
-        Game.ss=new Audio("C2.MP3");
-        Game.s1=new Audio("s2.mp3");
+        //Game.ss=new Audio("C2.MP3");
+        //Game.s1=new Audio("s2.mp3");
     	Game.progressBar();
-
+        Game.initValues();
     }
     ,
     initLevel: function(){
@@ -175,11 +184,11 @@ var Game = {
                 clearInterval(Game.interval);
                 if (Game.LIVES == 0)
                 {
-                    Game.createDialog("Game Over !!", "Back to Home");
+                    Game.createDialog("GAME OVER!! </br>Your TOTAL SCORE: " + Game.TOTAL_SCORE, "Back Home");
                 }
                 else
                 {
-                    Game.createDialog("Timeout !! YOU LOST", "Try again");
+                    Game.createDialog("TIMEOUT!! </br>YOU LOST", "Try Again");
                 }
                 timerobj.innerHTML = Game.styleTime(0,0);
             }
@@ -196,25 +205,26 @@ var Game = {
         buttonobj = document.getElementById("b");
         buttonobj.innerHTML=buttoncontent;
 
-        var text = new myElement("",100,100,550,270,"label1","page4","label");
+        var text = new myElement("",300,50,500,270,"label1","page4","label");
         textobj = document.getElementById("label1");
         textobj.innerHTML=dialogcontent;
 
         buttonobj.onclick= function(){
-                        Game.erasePage("page4");
-                        Game.endLevel();
-                        if (buttoncontent=="Back to Home")
-                        {
-                            Game.init();
-                        }
-                        else if (buttoncontent=="Try again")
-                        {
-                            Game.initLevel();
-                        }
-                        else if (buttoncontent=="Continue")
-                        {
-                            Game.initMap();
-                        }
+            Game.erasePage("page4");
+            Game.endLevel();
+            if (buttoncontent=="Back Home")
+            {
+                Game.initValues();
+                Game.menuInit();
+            }
+            else if (buttoncontent=="Try Again")
+            {
+                Game.initLevel();
+            }
+            else if (buttoncontent=="Continue")
+            {
+                Game.initMap();
+            }
         }
     }
     ,
@@ -500,7 +510,10 @@ var Game = {
                     Game.CATCHED_EGGS++;
                     if (Game.CATCHED_EGGS >= Game.MAX_CATCHED_EGGS){
                         Game.endTimeouts();
-                        Game.createDialog("GONGRATULATIONS !! You passed level " + Game.level,"Continue")
+                        Game.updateBadges();
+                        console.log(Game.B_str);
+                        Game.createDialog("CONGRATULATIONS!! <br/>You passed LEVEL " + Game.level,"Continue")
+                        Game.badgeDialoge();
                     }
                 }
             }
@@ -508,6 +521,7 @@ var Game = {
         if(Game.INGAME){
         setTimeout(function(){
             Game.catchEgg();
+            console.log(Game.MAX_EGGS_IN_ROW);
             //console.log("catcheggs")
         }, 2);}
 
@@ -613,11 +627,11 @@ var Game = {
                     Game.endTimeouts();
                     if (Game.LIVES == 0)
                     {
-                        Game.createDialog("Game Over !!", "Back to Home");
+                        Game.createDialog("GAME OVER!! </br>Your TOTAL SCORE: " + Game.TOTAL_SCORE, "Back Home");
                     }
                     else
                     {
-                        Game.createDialog("You Lost !!", "Try again");
+                        Game.createDialog("You Lost!!", "Try Again");
                     }
 
                 }
@@ -638,13 +652,11 @@ var Game = {
     ,
     endLevel: function(){
         document.getElementById("div1").style.cursor = "default";
-        Game.updateBadges();
+        
         if(Game.CHECK==0)
         {
             if(Game.LIVES==0)
             {
-                Game.LIVES=3;
-                Game.level=1;
                 Game.INGAME=false;
             }
             else
@@ -665,18 +677,16 @@ var Game = {
         Game.CATCHED_EGGS = 0;
         Game.ALL_EGGS = 0;
         Game.CATCHED_COL_EGGS = 0;
-        
-        //Game.MINUTES = 0;
-        //Game.SECONDS = 0;
+        Game.MAX_EGGS_IN_ROW = 0;
 
     }
     ,
     updateBadges: function()
     {
         if (Game.CHECK == 1 && Game.BROKEN_EGGS < 5)
-            {
-                Game.B1 = "images/badge1.png";
-            }
+        {
+            Game.B1 = "images/badge1.png";
+        }
         if (Game.CHECK == 1 && Game.MAX_EGGS_IN_ROW >= 10)
         {
             Game.B2 = "images/badge2.png";
@@ -687,11 +697,33 @@ var Game = {
         }
     }
     ,
+    badgeDialoge: function()
+    {
+        if (!Game.B1_flag && Game.B1 == "images/badge1.png")
+        { 
+            //Game.B_str = Game.B_str + "<br/>" + Game.B1_str;
+            var B1_element = new myElement("images/badge1.png",50,75,500,310,"b11","page4","img");
+            Game.B1_flag = true;
+        }
+        if (!Game.B2_flag && Game.B2 == "images/badge2.png")
+        {
+            var B1_element = new myElement("images/badge2.png",50,75,560,310,"b22","page4","img");
+        //    Game.B_str = Game.B_str + "<br/>" + Game.B2_str;
+            Game.B2_flag = true;
+        }
+        if (!Game.B3_flag && Game.B3 == "images/badge3.png")
+        {
+            var B1_element = new myElement("images/badge3.png",50,75,620,310,"b33","page4","img");
+           // Game.B_str = Game.B_str + "<br/>" + Game.B3_str;
+            Game.B3_flag = true;
+        }
+    }
+    ,
     addLevelInfo: function(){
         if(Game.level==1)
         {
             Game.MAX_CATCHED_EGGS = 50;
-            Game.MAX_BROKEN_EGGS = 35;
+            Game.MAX_BROKEN_EGGS = 30;
             Game.MINUTES = 1;
             Game.SECONDS = 0;
             Game.EGG_MOVE_EVERY = 20;
@@ -700,7 +732,7 @@ var Game = {
         }
         else if(Game.level==2)
         {
-            Game.MAX_CATCHED_EGGS = 130;
+            Game.MAX_CATCHED_EGGS = 100;
             Game.MAX_BROKEN_EGGS = 30;
             Game.MINUTES = 1;
             Game.SECONDS = 30;
@@ -710,7 +742,7 @@ var Game = {
         }
         else if(Game.level==3)
         {
-            Game.MAX_CATCHED_EGGS = 225;
+            Game.MAX_CATCHED_EGGS = 200;
             Game.MAX_BROKEN_EGGS = 25;
             Game.MINUTES = 2;
             Game.SECONDS = 0;
@@ -723,7 +755,7 @@ var Game = {
     progressBar: function()
     {
         var pbar= document.getElementById("progress1");
-        console.log(pbar);
+        //console.log(pbar);
         pbar.value += 1;
         if (pbar.value == 100){Game.FLAG = 1;}
         if (Game.FLAG == 0){
@@ -755,7 +787,7 @@ var Game = {
         Game.TOTAL_SCORE = Game.SCORE_1 + Game.SCORE_2 + Game.SCORE_3;
         setTimeout(function(){
             Game.calcScore();
-            console.log(Game.TOTAL_SCORE);
+            //console.log(Game.TOTAL_SCORE);
         },50);
         //Game.TOTAL_SCORE = 5*Game.CATCHED_EGGS + 30*Game.CATCHED_COL_EGGS - 3*Game.BROKEN_EGGS;
     }
@@ -771,6 +803,4 @@ var Game = {
 
 
 }
-//Game.initInstructions();
-//Game.menuInit();
 Game.init();
