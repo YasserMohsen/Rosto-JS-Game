@@ -104,7 +104,9 @@ var Game = {
 
       ng.onclick = function(){
         Game.erasePage("page2");
-        Game.initMap();}
+        Game.initValues();
+        Game.initMap();
+    }
 
       ins.onclick = function(){
         Game.erasePage("page2");
@@ -116,8 +118,10 @@ var Game = {
      }
 
      ex.onclick = function(){
+       //open('http://google.com','_self');
        window.close();
    }
+
  }
     ,
     initInstructions: function(){
